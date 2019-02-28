@@ -1,5 +1,3 @@
-import { flatten, sum, castToNumber, getRandomInt } from  "./utils.js";
-
 const DICE_EXPRESSION_REGEXP = /^((-?)(\d+|\d*d\d+))([+-](\d+|\d*d\d+))*$/;
 const SINGLE_DICE_REGEXP = /^-?(\d+|\d*d\d+)$/;
 
@@ -17,7 +15,7 @@ const getDice = function(expression) {
   if (!SINGLE_DICE_REGEXP.test(expression)) {
     throw new Error("Given single dice expression isn't valid");
   }
-  const [_count, _side] = expression.split("d").map(castToNumber);
+  const [_count, _side] = expression.split("d").map(string => Number(string));
   const count = Math.abs(_count) || 1;
   const side = _side || 1;
   const sign = _count < 0 ? -1 : 1;
@@ -29,6 +27,8 @@ const parse = expression =>
     .replace(/-/g, "+-")
     .split("+")
     .map(getDice);
+
+const getRandomInt = max => Math.floor(Math.random() * max) + 1;
 
 const rollDie = function({ count, side, sign }) {
   let results = [];
@@ -54,6 +54,13 @@ const maximize = function({ count, side, sign }) {
   const _side = sign === -1 ? 1 : side;
   return count * sign * _side;
 };
+
+const sum = (accumulator, current) => accumulator + current;
+
+const flatten = (accumulator, current) =>
+  Array.isArray(current)
+    ? accumulator.concat(current.reduce(flatten, []))
+    : accumulator.concat(current);
 
 const collect = function(results, detailed) {
   const rolls = results.reduce(flatten, []);
