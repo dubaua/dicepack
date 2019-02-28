@@ -5,7 +5,7 @@ Provides set of methods for rolling dice notation strings.
 
 ## roll
 
-Accept notation and optional detailed flag. Return resulting roll as number. Return detailed result if detailed flag given
+Accept notation and optional detailed flag. Return resulting roll as number. Return detailed result if detailed flag given.
 
 ```
 roll("2d6+3") => 9
@@ -18,7 +18,7 @@ roll("3d12+6d6-d4+3") => 28
 
 ## min
 
-Accept notation and optional detailed flag. Returns minimum possible result for dice notation. Return detailed result if detailed flag given
+Accept notation and optional detailed flag. Returns minimum possible result for dice notation. Return detailed result if detailed flag given.
 
 ```
 min("2d6+3") => 5
@@ -29,7 +29,7 @@ min(d6-d6) => -5
 
 ## max
 
-Accept notation and optional detailed flag. Returns maximum possible result for dice notation. Return detailed result if detailed flag given
+Accept notation and optional detailed flag. Returns maximum possible result for dice notation. Return detailed result if detailed flag given.
 
 ```
 max("2d6+3") => 15
@@ -51,7 +51,7 @@ Dice object describes how to roll single notation part.
 
 ## parse
 
-Accept notation. Returns array of Dice objects. 
+Accept notation. Returns array of Dice objects.
 
 ```
 parse("2d6+3") => [ {count: 2, side: 6, sign: 1}, {count: 3, side: 1, sign: 1} ]
@@ -61,7 +61,7 @@ parse("d12-3") => [ {count: 1, side: 12, sign: 1}, {count: 3, side: 1, sign: -1}
 
 ## rollDice
 
-Accept Dice array and optional detailed flag. Return resulting roll as number and detailed result if detailed flag given
+Accept Dice array and optional detailed flag. Return resulting roll as number and detailed result if detailed flag given.
 
 ```
 const dice = [
@@ -83,7 +83,7 @@ rollDice(dice) => 22
 
 ## minDice
 
-Accept Dice array and optional detailed flag. Returns minimum possible result for Dice array. Return detailed result if detailed flag given
+Accept Dice array and optional detailed flag. Returns minimum possible result for Dice array. Return detailed result if detailed flag given.
 
 ```
 const dice = [
@@ -105,7 +105,7 @@ minDice(Dice) => 10
 
 ## maxDice
 
-Accept Dice array and optional detailed flag. Returns maximum possible result for Dice array. Return detailed result if detailed flag given
+Accept Dice array and optional detailed flag. Returns maximum possible result for Dice array. Return detailed result if detailed flag given.
 
 ```
 const dice = [
