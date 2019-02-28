@@ -1,6 +1,11 @@
 export const castToNumber = string => Number(string);
 
-export const sumReducer = (accumulator, current) => accumulator + current;
+export const sum = (accumulator, current) => accumulator + current;
+
+export const flatten = (accumulator, current) =>
+  Array.isArray(current)
+    ? accumulator.concat(current.reduce(flatten, []))
+    : accumulator.concat(current);
 
 export const rollDie = side => {
   return Math.floor(random() * side) + 1;
@@ -17,8 +22,8 @@ export const times = (fn, count) => {
 };
 
 export const random = () => {
-  let array = new Uint32Array(1);
   const _crypto = window.crypto || window.msCrypto;
+  let array = new Uint32Array(1);
   _crypto.getRandomValues(array);
   return array[0] * Math.pow(2, -32);
 };
