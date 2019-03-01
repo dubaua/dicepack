@@ -14,9 +14,12 @@
   "license": "MIT",
   "devDependencies": {
     "@babel/core": "^7.3.4",
+    "@babel/register": "^7.0.0",
+    "mocha": "^6.0.2",
     "parcel-bundler": "^1.11.0"
   },
   "scripts": {
+    "test": "mocha --require @babel/register roll-expression.test.js",
     "build": "parcel build index.js"
   }
 }
