@@ -2,7 +2,7 @@ import assert from 'assert';
 import { getDice } from '../index.js';
 
 describe('getDice', function() {
-  describe('custom input', function() {
+  describe('test edge cases', function() {
     it('  d4 => { count: 1, side: 4, sign:  1 }', function() {
       const { count, side, sign } = getDice('d4');
       assert.equal(count, 1);
@@ -76,29 +76,42 @@ describe('getDice', function() {
 
   const getRandomInt = max => Math.floor(Math.random() * max) + 1;
 
-  const randomTestCount = getRandomInt(20);
-  describe(`random ${randomTestCount} user input`, function() {
+  const takeRandom = function() {
+    return arguments[getRandomInt(arguments.length) - 1];
+  }
+
+  const randomTestCount = getRandomInt(50);
+  describe(`test random ${randomTestCount} valid user input`, function() {
     for (let test = 0; test < randomTestCount; test++) {
-      const _count = getRandomInt(randomTestCount);
-      const _side = getRandomInt(randomTestCount);
-      const _sign = getRandomInt(2) - 2 < 0 ? -1 : 1;
+      // randomize new dice
+      const randomDice = {
+        count: getRandomInt(11) - 1,
+        side: takeRandom(0, 1, 4, 6, 8, 10, 12, 20, 100),
+        sign: takeRandom(1, -1),
+      };
 
-      const __side = _side === 1 ? '' : `d${_side}`;
-      let __count;
-      if (_side !== 1) {
-        __count = _count === 1 ? '' : _count;
-      } else {
-        __count = _count;
+      // collecting notation parts
+      let side = `d${randomDice.side}`;
+      if (randomDice.side === 1) {
+        side = takeRandom(side, ''); // drop some d1's
       }
-      const __sign = _sign === -1 ? '-' : '';
+      let count = randomDice.count;
+      if (randomDice.count === 1) {
+        count = takeRandom(count, ''); // drop some 1d's
+      }
+      if (side === '') {
+        count = randomDice.count; // restore count in case of dropped d1
+      }
+      const sign = randomDice.sign === -1 ? '-' : '';
 
-      const notation = `${__sign}${__count}${__side}`;
-
-      it(`${notation} => { count: ${_count}, side: ${_side}, sign: ${_sign} }`, function() {
-        const { count, side, sign } = getDice(`${notation}`);
-        assert.equal(count, _count);
-        assert.equal(side, _side);
-        assert.equal(sign, _sign);
+      // glue notation
+      const notation = `${sign}${count}${side}`;
+      
+      it(`${notation} => { count: ${randomDice.count}, side: ${randomDice.side}, sign: ${randomDice.sign} }`, function() {
+        const resultDice = getDice(`${notation}`);
+        assert.equal(resultDice.count, randomDice.count);
+        assert.equal(resultDice.side, randomDice.side);
+        assert.equal(resultDice.sign, randomDice.sign);
       });
     }
   });
