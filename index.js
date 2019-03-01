@@ -82,4 +82,4 @@ const min = (expression, detailed) => minDice(parse(expression), detailed);
 
 const max = (expression, detailed) => maxDice(parse(expression), detailed);
 
-export { parse, rollDice, minDice, maxDice, roll, min, max };
+export { parse, getDice, rollDice, minDice, maxDice, roll, min, max };

@@ -19,7 +19,7 @@
     "parcel-bundler": "^1.11.0"
   },
   "scripts": {
-    "test": "mocha --require @babel/register roll-expression.test.js",
+    "test": "mocha --require @babel/register ./test/**/*.spec.js",
     "build": "parcel build index.js"
   }
 }
