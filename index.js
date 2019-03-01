@@ -1,31 +1,30 @@
-const DICE_EXPRESSION_REGEXP = /^((-?)(\d+|\d*d\d+))([+-](\d+|\d*d\d+))*$/;
-const SINGLE_DICE_REGEXP = /^-?(\d+|\d*d\d+)$/;
+const NOTATION_REGEXP = /^((-?)(\d+|\d*d\d+))([+-](\d+|\d*d\d+))*$/;
+const DICE_REGEXP = /^-?(\d+|\d*d\d+)$/;
 
-const validate = function(expression) {
-  if (
-    typeof expression === "string" &&
-    !DICE_EXPRESSION_REGEXP.test(expression)
-  ) {
-    throw new Error("Given dice expression isn't valid");
+const validate = function(string, regexp) {
+  if (typeof string !== 'string' || !regexp.test(string)) {
+    throw new Error(`Given expression ${string} isn't valid`);
   }
-  return expression;
+  return string;
+};
+
+const castToNatural = function(string) {
+  const number = parseInt(string);
+  return isNaN(number) ? 1 : Math.abs(number);
 };
 
 const getDice = function(expression) {
-  if (!SINGLE_DICE_REGEXP.test(expression)) {
-    throw new Error("Given single dice expression isn't valid");
-  }
-  const [_count, _side] = expression.split("d").map(string => Number(string));
-  const count = Math.abs(_count) || 1;
-  const side = _side || 1;
-  const sign = _count < 0 ? -1 : 1;
+  const [count, _side] = validate(expression, DICE_REGEXP).split('d').map(castToNatural);
+  const side = typeof _side === 'undefined' ? 1 : _side;
+  const sign = expression[0] === '-' ? -1 : 1;
   return { count, side, sign };
 };
 
 const parse = expression =>
-  validate(expression)
-    .replace(/-/g, "+-")
-    .split("+")
+  validate(expression, NOTATION_REGEXP)
+    .replace(/-/g, '+-')
+    .split('+')
+    .filter(string => string !== '')
     .map(getDice);
 
 const getRandomInt = max => Math.floor(Math.random() * max) + 1;
