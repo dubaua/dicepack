@@ -116,19 +116,3 @@ describe('getDice', function() {
     }
   });
 });
-
-// describe('min', function() {
-//   describe('results', function() {
-//     it('min d4 = 1', function() {
-//       assert.equal(min('d4'), 1);
-//     });
-
-//     it('min -d4 = -4', function() {
-//       assert.equal(min('-d4'), -4);
-//     });
-
-//     it('min d4-d4 = -3', function() {
-//       assert.equal(min('d4-d4'), -3);
-//     });
-//   });
-// });
