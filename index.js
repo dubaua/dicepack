@@ -31,8 +31,11 @@ const getRandomInt = max => Math.floor(Math.random() * max) + 1;
 
 const rollDie = function({ count, side, sign }) {
   let results = [];
-  // no need to roll d1
-  if (side === 1) {
+  if (side === 0 || count === 0) {
+    // no need to roll 0
+    results.push(0);
+  } else if (side === 1) {
+    // no need to roll d1
     results.push(count * sign);
   } else {
     for (let i = 0; i < count; i++) {
