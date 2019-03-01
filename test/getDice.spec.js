@@ -76,8 +76,8 @@ describe('getDice', function() {
 
   const getRandomInt = max => Math.floor(Math.random() * max) + 1;
 
-  const takeRandom = function() {
-    return arguments[getRandomInt(arguments.length) - 1];
+  const takeRandom = function(...items) {
+    return items[getRandomInt(items.length) - 1];
   }
 
   const randomTestCount = getRandomInt(50);
@@ -112,6 +112,42 @@ describe('getDice', function() {
         assert.equal(resultDice.count, randomDice.count);
         assert.equal(resultDice.side, randomDice.side);
         assert.equal(resultDice.sign, randomDice.sign);
+      });
+    }
+  });
+
+  describe('test error cases', function() {
+    const errorExpressions = [
+      'd',
+      '-d',
+      'd-',
+      '-',
+      '',
+      '1d',
+      '-1d',
+      '1d-',
+      '1-d',
+      'd-1',
+      'd-d',
+      '1-1',
+      '-d-',
+      '-1-',
+      '.1d1',
+      '1.d1',
+      '1d.1',
+      '1d1.',
+      '.11d1',
+      '1.1d1',
+      '11.d1',
+      '1d1.1',
+      '1d11.',
+    ];
+    for (let i = 0; i < errorExpressions.length; i++) {
+      const wrongNotation = errorExpressions[i];
+      it(`"${wrongNotation}" => throws error`, function() {
+        assert.throws(function() {
+          getDice(wrongNotation)
+        });
       });
     }
   });
