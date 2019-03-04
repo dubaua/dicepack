@@ -1,5 +1,6 @@
 const NOTATION_REGEXP = /^((-?)(\d+|\d*d\d+))([+-](\d+|\d*d\d+))*$/;
 const DICE_REGEXP = /^-?(\d+|\d*d\d+)$/;
+const STARTING_D_WIHTOUT_MULTIPLIER = /^(-?)d/;
 
 const validate = function(string, regexp) {
   if (typeof string !== 'string' || !regexp.test(string)) {
@@ -8,16 +9,20 @@ const validate = function(string, regexp) {
   return string;
 };
 
-const castToNatural = function(string) {
+const castToNumber = function(string) {
   const number = parseInt(string);
-  return isNaN(number) ? 1 : Math.abs(number);
+  return typeof number === 'undefined' || isNaN(number) ? 1 : number;
 };
 
 const getDice = function(expression) {
-  const [count, _side] = validate(expression, DICE_REGEXP).split('d').map(castToNatural);
-  const side = typeof _side === 'undefined' ? 1 : _side;
-  const sign = expression[0] === '-' ? -1 : 1;
-  return { count, side, sign };
+  const [_multiplier, _side] = validate(expression, DICE_REGEXP)
+    // restore dropped 1d with sign 1d
+    .replace(STARTING_D_WIHTOUT_MULTIPLIER, '$11d')
+    .split('d')
+    .map(castToNumber);
+  const side = castToNumber(_side);
+  const multiplier = _multiplier === -0 ? 0 : _multiplier;
+  return { multiplier, side };
 };
 
 const parse = expression =>
@@ -29,33 +34,29 @@ const parse = expression =>
 
 const getRandomInt = max => Math.floor(Math.random() * max) + 1;
 
-const rollDie = function({ count, side, sign }) {
+const rollDie = function({ multiplier, side }) {
   let results = [];
-  if (side === 0 || count === 0) {
+  if (side === 0 || multiplier === 0) {
     // no need to roll 0
     results.push(0);
   } else if (side === 1) {
     // no need to roll d1
-    results.push(count * sign);
+    results.push(multiplier);
   } else {
-    for (let i = 0; i < count; i++) {
-      results.push(getRandomInt(side) * sign);
+    const rollCount = Math.abs(multiplier);
+    const sign = multiplier / rollCount;
+    for (let i = 0; i < rollCount; i++) {
+      results.push(sign * getRandomInt(side));
     }
   }
   return results;
 };
 
-const minimize = function({ count, side, sign }) {
-  // maximize in case of negative roll
-  const _side = sign === -1 ? side : 1;
-  return count * sign * _side;
-};
+// maximize in case of negative roll
+const minimize = ({ multiplier, side }) => multiplier * (multiplier < 0 ? side : 1);
 
-const maximize = function({ count, side, sign }) {
-  // minimize in case of negative roll
-  const _side = sign === -1 ? 1 : side;
-  return count * sign * _side;
-};
+// minimize in case of negative roll
+const maximize = ({ multiplier, side }) => multiplier * (multiplier < 0 ? 1 : side);
 
 const sum = (accumulator, current) => accumulator + current;
 
