@@ -3,122 +3,112 @@ import { getDice } from '../index.js';
 
 describe('getDice', function() {
   describe('test edge cases', function() {
-    describe('works properly with dropped multiplier = 1', function() {
-      it('d4 => { multiplier: 1, side: 4 }', function() {
-        const { multiplier, side } = getDice('d4');
-        assert.equal(multiplier, 1);
-        assert.equal(side, 4);
-      });
+    const isDice = function(dice) {
+      return (
+        dice.hasOwnProperty('count') &&
+        dice.hasOwnProperty('side') &&
+        typeof dice.count === 'number' &&
+        typeof dice.side === 'number'
+      );
+    };
+    it('returns result type of dice', function() {
+      const result = getDice('d4');
+      const resultIsDice = isDice(result);
+      assert.strictEqual(resultIsDice, true);
     });
 
-    describe('works properly with dropped multiplier = -1', function() {
-      it('-d6 => { multiplier: -1, side: 6 }', function() {
-        const { multiplier, side } = getDice('-d6');
-        assert.equal(multiplier, -1);
-        assert.equal(side, 6);
-      });
+    it('works properly with dropped count', function() {
+      const { count, side } = getDice('d4');
+      assert.strictEqual(count, 1);
+      assert.strictEqual(side, 4);
     });
 
-    describe('works properly with numbers', function() {
-      it('12 => { multiplier: 12, side: 1 }', function() {
-        const { multiplier, side } = getDice('12');
-        assert.equal(multiplier, 12);
-        assert.equal(side, 1);
-      });
+    it('works properly with dropped negative count', function() {
+      const { count, side } = getDice('-d6');
+      assert.strictEqual(count, -1);
+      assert.strictEqual(side, 6);
     });
 
-    describe('works properly with negative numbers', function() {
-      it('-3 => { multiplier: -3, side: 1 }', function() {
-        const { multiplier, side } = getDice('-3');
-        assert.equal(multiplier, -3);
-        assert.equal(side, 1);
-      });
+    it('works properly with flat numbers', function() {
+      const { count, side } = getDice('12');
+      assert.strictEqual(count, 12);
+      assert.strictEqual(side, 1);
     });
 
-    describe('correctly process zero sides', function() {
-      it('-d0 => { multiplier: -1, side: 0 }', function() {
-        const { multiplier, side } = getDice('-d0');
-        assert.equal(multiplier, -1);
-        assert.equal(side, 0);
-      });
+    it('works properly with negative flat numbers', function() {
+      const { count, side } = getDice('-3');
+      assert.strictEqual(count, -3);
+      assert.strictEqual(side, 1);
     });
 
-    describe('correctly process zero number', function() {
-      it('0 => { multiplier: 0, side: 1 }', function() {
-        const { multiplier, side } = getDice('0');
-        assert.equal(multiplier, 0);
-        assert.equal(side, 1);
-      });
+    it('correctly process zero sides', function() {
+      const { count, side } = getDice('-d0');
+      assert.strictEqual(count, -1);
+      assert.strictEqual(side, 0);
     });
 
-    describe('negative zero transforms to zero', function() {
-      it('-0 => { multiplier: 0, side: 1 }', function() {
-        const { multiplier, side } = getDice('-0');
-        assert.equal(multiplier, 0);
-        assert.equal(side, 1);
-      });
+    it('correctly process zero number', function() {
+      const { count, side } = getDice('0');
+      assert.strictEqual(count, 0);
+      assert.strictEqual(side, 1);
     });
 
-    describe('nonsense, but notation correct', function() {
-      it('0d0 => { multiplier: 0, side: 0 }', function() {
-        const { multiplier, side } = getDice('0d0');
-        assert.equal(multiplier, 0);
-        assert.equal(side, 0);
-      });
+    it('negative zero transforms to zero', function() {
+      const { count, side } = getDice('-0');
+      assert.strictEqual(count, 0);
+      assert.strictEqual(side, 1);
     });
 
-    describe('nonsense, but notation correct', function() {
-      it('-0d0 => { multiplier: 0, side: 0 }', function() {
-        const { multiplier, side } = getDice('-0d0');
-        assert.equal(multiplier, 0);
-        assert.equal(side, 0);
-      });
+    it('nonsense, but notation correct 0d0', function() {
+      const { count, side } = getDice('0d0');
+      assert.strictEqual(count, 0);
+      assert.strictEqual(side, 0);
     });
 
-    describe('leading zero properly dropped', function() {
-      it('02d4 => { multiplier: 2, side: 4 }', function() {
-        const { multiplier, side } = getDice('02d4');
-        assert.equal(multiplier, 2);
-        assert.equal(side, 4);
-      });
+    it('nonsense, but notation correct -0d0', function() {
+      const { count, side } = getDice('-0d0');
+      assert.strictEqual(count, 0);
+      assert.strictEqual(side, 0);
     });
 
-    describe('leading zero with negatives properly dropped', function() {
-      it('-03d6 => { multiplier: -3, side: 6 }', function() {
-        const { multiplier, side } = getDice('-03d6');
-        assert.equal(multiplier, -3);
-        assert.equal(side, 6);
-      });
+    it('leading zero properly dropped', function() {
+      const { count, side } = getDice('02d4');
+      assert.strictEqual(count, 2);
+      assert.strictEqual(side, 4);
     });
 
-    describe('zero on side notation properly dropped', function() {
-      it('d04 => { multiplier: 1, side: 4 }', function() {
-        const { multiplier, side } = getDice('d04');
-        assert.equal(multiplier, 1);
-        assert.equal(side, 4);
-      });
+    it('leading zero with negatives properly dropped', function() {
+      const { count, side } = getDice('-03d6');
+      assert.strictEqual(count, -3);
+      assert.strictEqual(side, 6);
     });
 
-    describe('zero on negative side notation throws an error', function() {
-      it('d0-4 => error', function() {
-        assert.throws(function() {
-          getDice('d0-4');
-        });
+    it('zero on side notation properly dropped', function() {
+      const { count, side } = getDice('d04');
+      assert.strictEqual(count, 1);
+      assert.strictEqual(side, 4);
+    });
+
+    it('zero on negative side notation throws an error', function() {
+      assert.throws(function() {
+        getDice('d0-4');
       });
     });
   });
 
-  describe(`test random 50 valid user input`, function() {
+  describe(`test random 1000 valid user input`, function() {
     const getRandomInt = max => Math.floor(Math.random() * max) + 1;
 
     const takeRandom = function(...items) {
       return items[getRandomInt(items.length) - 1];
     };
 
-    for (let test = 0; test < 50; test++) {
+    let results = [];
+
+    for (let test = 0; test < 1000; test++) {
       // randomize new dice
       const randomDice = {
-        multiplier: takeRandom(1, -1) * getRandomInt(11) - 1,
+        count: takeRandom(1, -1) * getRandomInt(11) - 1,
         side: takeRandom(0, 1, 4, 6, 8, 10, 12, 20, 100),
       };
 
@@ -127,23 +117,32 @@ describe('getDice', function() {
       if (randomDice.side === 1) {
         side = takeRandom(side, ''); // drop some d1's
       }
-      let multiplier = randomDice.multiplier;
-      if (randomDice.multiplier === 1) {
-        multiplier = takeRandom(multiplier, ''); // drop some 1d's
+      let count = randomDice.count;
+      if (randomDice.count === 1) {
+        count = takeRandom(count, ''); // drop some 1d's
       }
       if (side === '') {
-        multiplier = randomDice.multiplier; // restore multiplier in case of dropped d1
+        count = randomDice.count; // restore count in case of dropped d1
       }
 
       // glue notation
-      const notation = `${multiplier}${side}`;
+      const notation = `${count}${side}`;
+      
+      // testing
+      const resultDice = getDice(`${notation}`);
+      const resultIsCorrect = resultDice.count === randomDice.count && resultDice.side === randomDice.side;
 
-      it(`${notation} => { multiplier: ${randomDice.multiplier}, side: ${randomDice.side} }`, function() {
-        const resultDice = getDice(`${notation}`);
-        assert.equal(resultDice.multiplier, randomDice.multiplier);
-        assert.equal(resultDice.side, randomDice.side);
-      });
+      // collecting
+      results.push(resultIsCorrect);
     }
+    // comparing
+    const everyIsCorrect = results.every(result => result === true);
+    it('1000 tests executed', function() {
+      assert.strictEqual(results.length, 1000);
+    });
+    it('each result is correct', function() {
+      assert.strictEqual(everyIsCorrect, true);
+    });
   });
 
   describe('test error cases', function() {
@@ -171,10 +170,14 @@ describe('getDice', function() {
       '11.d1',
       '1d1.1',
       '1d11.',
+      true,
+      false,
+      1,
+      0,
     ];
     for (let i = 0; i < errorExpressions.length; i++) {
       const wrongNotation = errorExpressions[i];
-      it(`"${wrongNotation}" => throws error`, function() {
+      it(`${wrongNotation} => throws error`, function() {
         assert.throws(function() {
           getDice(wrongNotation);
         });

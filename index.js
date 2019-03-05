@@ -1,6 +1,6 @@
 const NOTATION_REGEXP = /^((-?)(\d+|\d*d\d+))([+-](\d+|\d*d\d+))*$/;
 const DICE_REGEXP = /^-?(\d+|\d*d\d+)$/;
-const STARTING_D_WIHTOUT_MULTIPLIER = /^(-?)d/;
+const STARTING_D_WIHTOUT_COUNT = /^(-?)d/;
 
 const validate = function(string, regexp) {
   if (typeof string !== 'string' || !regexp.test(string)) {
@@ -15,14 +15,14 @@ const castToNumber = function(string) {
 };
 
 const getDice = function(expression) {
-  const [_multiplier, _side] = validate(expression, DICE_REGEXP)
+  const [_count, _side] = validate(expression, DICE_REGEXP)
     // restore dropped 1d with sign 1d
-    .replace(STARTING_D_WIHTOUT_MULTIPLIER, '$11d')
+    .replace(STARTING_D_WIHTOUT_COUNT, '$11d')
     .split('d')
     .map(castToNumber);
   const side = castToNumber(_side);
-  const multiplier = _multiplier === -0 ? 0 : _multiplier;
-  return { multiplier, side };
+  const count = _count === -0 ? 0 : _count;
+  return { count, side };
 };
 
 const parse = expression =>
@@ -34,17 +34,17 @@ const parse = expression =>
 
 const getRandomInt = max => Math.floor(Math.random() * max) + 1;
 
-const rollDie = function({ multiplier, side }) {
+const rollDie = function({ count, side }) {
   let results = [];
-  if (side === 0 || multiplier === 0) {
+  if (side === 0 || count === 0) {
     // no need to roll 0
     results.push(0);
   } else if (side === 1) {
     // no need to roll d1
-    results.push(multiplier);
+    results.push(count);
   } else {
-    const rollCount = Math.abs(multiplier);
-    const sign = multiplier / rollCount;
+    const rollCount = Math.abs(count);
+    const sign = count / rollCount;
     for (let i = 0; i < rollCount; i++) {
       results.push(sign * getRandomInt(side));
     }
@@ -53,10 +53,10 @@ const rollDie = function({ multiplier, side }) {
 };
 
 // maximize in case of negative roll
-const minimize = ({ multiplier, side }) => multiplier * (multiplier < 0 ? side : 1);
+const minimize = ({ count, side }) => count * (count < 0 ? side : 1);
 
 // minimize in case of negative roll
-const maximize = ({ multiplier, side }) => multiplier * (multiplier < 0 ? 1 : side);
+const maximize = ({ count, side }) => count * (count < 0 ? 1 : side);
 
 const sum = (accumulator, current) => accumulator + current;
 
@@ -86,4 +86,4 @@ const min = (expression, detailed) => minDice(parse(expression), detailed);
 
 const max = (expression, detailed) => maxDice(parse(expression), detailed);
 
-export { parse, getDice, rollDice, minDice, maxDice, roll, min, max };
+export { parse, getDice, rollDie, minimize, maximize, rollDice, minDice, maxDice, roll, min, max };
