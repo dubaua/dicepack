@@ -11,17 +11,14 @@ const validate = function(string, regexp) {
 
 const castToNumber = function(string) {
   const number = parseInt(string);
-  return typeof number === 'undefined' || isNaN(number) ? 1 : number;
+  return isNaN(number) ? 1 : number;
 };
 
 const getDice = function(expression) {
-  const [_count, _side] = validate(expression, DICE_REGEXP)
-    // restore dropped 1d with sign 1d
-    .replace(STARTING_D_WIHTOUT_COUNT, '$11d')
+  const [count, side = 1] = validate(expression, DICE_REGEXP)
+    .replace(STARTING_D_WIHTOUT_COUNT, '$11d') // restore dropped 1d with sign 1d
     .split('d')
     .map(castToNumber);
-  const side = castToNumber(_side);
-  const count = _count === -0 ? 0 : _count;
   return { count, side };
 };
 
@@ -61,9 +58,7 @@ const maximize = ({ count, side }) => count * (count < 0 ? 1 : side);
 const sum = (accumulator, current) => accumulator + current;
 
 const flatten = (accumulator, current) =>
-  Array.isArray(current)
-    ? accumulator.concat(current.reduce(flatten, []))
-    : accumulator.concat(current);
+  Array.isArray(current) ? accumulator.concat(current.reduce(flatten, [])) : accumulator.concat(current);
 
 const collect = function(results, detailed) {
   const rolls = results.reduce(flatten, []);
