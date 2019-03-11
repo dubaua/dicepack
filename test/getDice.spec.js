@@ -55,7 +55,7 @@ describe('getDice', function() {
 
     it('correctly process negative zero', function() {
       const { count, side } = getDice('-0');
-      assert.strictEqual(count, -0);
+      assert.strictEqual(count, 0);
       assert.strictEqual(side, 1);
     });
 
@@ -67,7 +67,7 @@ describe('getDice', function() {
 
     it('nonsense, but notation correct -0d0', function() {
       const { count, side } = getDice('-0d0');
-      assert.strictEqual(count, -0);
+      assert.strictEqual(count, 0);
       assert.strictEqual(side, 0);
     });
 

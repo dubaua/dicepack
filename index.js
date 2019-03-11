@@ -9,13 +9,10 @@ const validate = function(string, regexp) {
   return string;
 };
 
-const castToNumber = function(string) {
-  const number = parseInt(string);
-  return isNaN(number) ? 1 : number;
-};
+const castToNumber = string => parseInt(string, 10) || 0;
 
 const getDice = function(expression) {
-  const [count, side = 1] = validate(expression, DICE_REGEXP)
+  const [count = 1, side = 1] = validate(expression, DICE_REGEXP)
     .replace(STARTING_D_WIHTOUT_COUNT, '$11d') // restore dropped 1d with sign 1d
     .split('d')
     .map(castToNumber);
