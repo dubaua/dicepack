@@ -33,9 +33,20 @@ describe('maxDice', function() {
         Array.isArray(result.rolls)
       );
     };
+
     const result = maxDice([{ count: 3, side: 4 }, { count: 6, side: 1 }], true);
     it('returns result type of detailed', function() {
       assert.strictEqual(isDetailed(result), true);
+    });
+
+    it('detailed rolls 3d4+6 length = 2, count of dice notation parts', function() {
+      assert.strictEqual(result.rolls.length, 2);
+    });
+
+    const [d4s, flat] = result.rolls;
+    it('detailed rolls 3d4+6 is equal to product of count and side (12, 6)', function() {
+      assert.strictEqual(d4s, 12);
+      assert.strictEqual(flat, 6);
     });
   });
 });

@@ -33,9 +33,21 @@ describe('min', function() {
         Array.isArray(result.rolls)
       );
     };
+
     const result = min('3d10+6d8+12', true);
     it('returns result type of detailed', function() {
       assert.strictEqual(isDetailed(result), true);
+    });
+
+    it('detailed rolls 3d10+6d8+12 length = 3, count of dice notation parts', function() {
+      assert.strictEqual(result.rolls.length, 3);
+    });
+
+    const [d10s, d8s, flat] = result.rolls;
+    it('detailed rolls 3d10+6d8+12 is equal to count parts (3, 6, 12)', function() {
+      assert.strictEqual(d10s, 3);
+      assert.strictEqual(d8s, 6);
+      assert.strictEqual(flat, 12);
     });
   });
 });

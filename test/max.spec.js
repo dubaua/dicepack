@@ -33,9 +33,21 @@ describe('max', function() {
         Array.isArray(result.rolls)
       );
     };
+
     const result = max('3d10+6d8+12', true);
     it('returns result type of detailed', function() {
       assert.strictEqual(isDetailed(result), true);
+    });
+
+    it('detailed rolls 3d10+6d8+12 length = 3, count of dice notation parts', function() {
+      assert.strictEqual(result.rolls.length, 3);
+    });
+
+    const [d10s, d8s, flat] = result.rolls;
+    it('detailed rolls 3d10+6d8+12 is equal to product of count and side (30, 48, 12)', function() {
+      assert.strictEqual(d10s, 30);
+      assert.strictEqual(d8s, 48);
+      assert.strictEqual(flat, 12);
     });
   });
 });

@@ -57,9 +57,8 @@ const sum = (accumulator, current) => accumulator + current;
 const flatten = (accumulator, current) =>
   Array.isArray(current) ? accumulator.concat(current.reduce(flatten, [])) : accumulator.concat(current);
 
-const collect = function(results, detailed) {
-  const rolls = results.reduce(flatten, []);
-  const result = rolls.reduce(sum, 0);
+const collect = function(rolls, detailed) {
+  const result = rolls.reduce(flatten, []).reduce(sum, 0);
   if (detailed) {
     return { result, rolls };
   }

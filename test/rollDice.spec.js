@@ -28,8 +28,20 @@ describe('rollDice', function() {
         Array.isArray(result.rolls)
       );
     };
+
     it('returns result type of detailed', function() {
       assert.strictEqual(isDetailed(result), true);
+    });
+
+    it('detailed rolls 2d12+3d6+5 length = 3, count of dice notation parts', function() {
+      assert.strictEqual(result.rolls.length, 3);
+    });
+
+    const [d12s, d6s, flat] = result.rolls;
+    it('each rolls 2d12+3d6+5 part length is equal to count of notation (2, 3, 1)', function() {
+      assert.strictEqual(d12s.length, 2);
+      assert.strictEqual(d6s.length, 3);
+      assert.strictEqual(flat.length, 1);
     });
   });
 
