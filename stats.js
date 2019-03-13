@@ -9,7 +9,7 @@ const diceStats = function(dice) {
   const independent = dice.reduce(function(accumulator, current) {
     const { count, side } = current;
     const rollCount = Math.abs(count);
-    const sign = count / rollCount;
+    const sign = Math.sign(count);
     if (side === 0 || count === 0) {
       accumulator.push([0]);
     } else if (side === 1) {

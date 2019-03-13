@@ -38,7 +38,7 @@ const rollDie = function({ count, side }) {
     results.push(count);
   } else {
     const rollCount = Math.abs(count);
-    const sign = count / rollCount;
+    const sign = Math.sign(count);
     for (let i = 0; i < rollCount; i++) {
       results.push(sign * getRandomInt(side));
     }
