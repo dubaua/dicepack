@@ -46,11 +46,9 @@ const rollDie = function({ count, side }) {
   return results;
 };
 
-// maximize in case of negative roll
-const minimize = ({ count, side }) => count * (count < 0 ? side : 1);
+const minimize = ({ count, side }) => Math.min(count, count * side);
 
-// minimize in case of negative roll
-const maximize = ({ count, side }) => count * (count < 0 ? 1 : side);
+const maximize = ({ count, side }) => Math.max(count, count * side);
 
 const sum = (accumulator, current) => accumulator + current;
 
