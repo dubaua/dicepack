@@ -5,7 +5,6 @@ const sum = (a, c) => a + c;
 const directProduct = (accumulator, current) => [].concat(...current.map(x => accumulator.map(y => sum(x, y))));
 
 const diceStats = function(dice) {
-  console.log(dice);
   const independent = dice.reduce(function(accumulator, current) {
     const { count, side } = current;
     const rollCount = Math.abs(count);
