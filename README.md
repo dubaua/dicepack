@@ -6,16 +6,16 @@ Provides set of methods for rolling dice notation strings.
 
 ## Dice
 
-`Dice` describes how to roll single dice notation.
+Dice describes how to roll single dice notation.
 
 | property | type     | description                                      |
 | -------- | -------- | ------------------------------------------------ |
 | count    | `Number` | represents roll count and sign, non zero integer |
-| side     | `Number` | dice range, natural number                       |
+| side     | `Number` | dice range, positive integer                     |
 
 ## Detailed
 
-`Detailed` shows resulting number and show each roll result.
+Detailed shows resulting number and show each roll result.
 
 | property | type                          | description               |
 | -------- | ----------------------------- | ------------------------- |
@@ -24,7 +24,7 @@ Provides set of methods for rolling dice notation strings.
 
 ## Stats
 
-`Stats` show chance distribution for each possible result, average,
+Stats show chance distribution for each possible result, average,
 variance and standard deviation.
 
 | property          | type                                      | description                             |
@@ -40,7 +40,7 @@ variance and standard deviation.
 
 `roll(expression: String, ?detailed: Boolean) => number | Detailed`
 
-Accept dice notation string and optional detailed flag. Return resulting roll as number or `Detailed` if flag given.
+Accept dice notation string and optional detailed flag. Return resulting roll as number or [Detailed](https://github.com/dubaua/roll-expression#detailed) if flag given.
 
 ```
 roll("2d6+3")         => 5..15
@@ -55,7 +55,7 @@ roll("2d6+3", true) => { result: 9, rolls: [[2, 4], [3]] }
 
 `min(expression: String, ?detailed: Boolean) => number | Detailed`
 
-Accept dice notation string and optional detailed flag. Returns minimum possible result for dice notation as number or `Detailed` if flag given.
+Accept dice notation string and optional detailed flag. Returns minimum possible result for dice notation as number or [Detailed](https://github.com/dubaua/roll-expression#detailed) if flag given.
 
 ```
 min("2d6+3")  => 5
@@ -68,7 +68,7 @@ min("2d6+3", true)  => { result: 5, rolls: [2, 3] }
 
 `max(expression: String, ?detailed: Boolean) => number | Detailed`
 
-Accept dice notation string and optional detailed flag. Returns maximum possible result for dice notation as number or `Detailed` if flag given.
+Accept dice notation string and optional detailed flag. Returns maximum possible result for dice notation as number or [Detailed](https://github.com/dubaua/roll-expression#detailed) if flag given.
 
 ```
 max("2d6+3")  => 15
@@ -81,7 +81,7 @@ max("2d6+3", true)  => { result: 15, rolls: [12, 3] }
 
 `stats(expression: String) => Stats`
 
-Accept dice notation string. Returns `Stats` including distribution array, average, variance and standart derivation.
+Accept dice notation string. Returns [Stats](https://github.com/dubaua/roll-expression#stats) including distribution array, average, variance and standart derivation.
 
 ```
 stats('d6') => {
@@ -121,7 +121,7 @@ stats('d6') => {
 
 `toDice(expression: String) => Array<Dice>`
 
-Accept dice notation string. Returns array of `Dice`.
+Accept dice notation string. Returns array of [Dice](https://github.com/dubaua/roll-expression#dice).
 
 ```
 toDice("2d6+3") => [
@@ -139,7 +139,7 @@ toDice("d12-3") => [
 
 `rollDice(Array<Dice>, ?detailed: Boolean) => number | Detailed`
 
-Accept `Dice` array and optional detailed flag. Return resulting roll as number or `Detailed` if flag given.
+Accept [Dice](https://github.com/dubaua/roll-expression#dice) array and optional detailed flag. Return resulting roll as number or [Detailed](https://github.com/dubaua/roll-expression#detailed) if flag given.
 
 ```
 const dice = toDice('3d10+7');
@@ -154,7 +154,7 @@ rollDice(dice, true) => {
 
 `minDice(Array<Dice>, ?detailed: Boolean) => number | Detailed`
 
-Accept `Dice` array and optional detailed flag. Returns minimum possible result for dice notation as number or `Detailed` if flag given.
+Accept [Dice](https://github.com/dubaua/roll-expression#dice) array and optional detailed flag. Returns minimum possible result for dice notation as number or [Detailed](https://github.com/dubaua/roll-expression#detailed) if flag given.
 
 ```
 const dice = toDice('2d8+3');
@@ -169,7 +169,7 @@ minDice(dice, true) => {
 
 `maxDice(Array<Dice>, ?detailed: Boolean) => number | Detailed`
 
-Accept `Dice` array and optional detailed flag. Returns maximum possible result for dice notation as number or `Detailed` if flag given.
+Accept [Dice](https://github.com/dubaua/roll-expression#dice) array and optional detailed flag. Returns maximum possible result for dice notation as number or [Detailed](https://github.com/dubaua/roll-expression#detailed) if flag given.
 
 ```
 const dice = toDice('3d10+7');
@@ -184,7 +184,7 @@ maxDice(dice, true) => {
 
 `statsDice(Array<Dice>) => Stats`
 
-Accept `Dice` array and optional detailed flag. Returns maximum possible result. Return `Detailed` if detailed flag given.
+Accept [Dice](https://github.com/dubaua/roll-expression#dice) array. Returns [Stats](https://github.com/dubaua/roll-expression#stats) including distribution array, average, variance and standart derivation.
 
 ```
 const dice = toDice('2d4');
