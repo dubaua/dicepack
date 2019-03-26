@@ -2,42 +2,6 @@ import assert from 'assert';
 import { rollDie } from '../index.js';
 
 describe('rollDie', function() {
-  describe('test side = 0', function() {
-    const result = rollDie({ count: -1, side: 0 });
-    const isArray = Array.isArray(result);
-    it('returns result type of array', function() {
-      assert.strictEqual(isArray, true);
-    });
-
-    const length = result.length;
-    it('result array length = 1', function() {
-      assert.strictEqual(length, 1);
-    });
-
-    const resultValue = result[0];
-    it('result = 0', function() {
-      assert.strictEqual(resultValue, 0);
-    });
-  });
-
-  describe('test count = 0', function() {
-    const result = rollDie({ count: 0, side: 12 });
-    const isArray = Array.isArray(result);
-    it('returns result type of array if count = 0', function() {
-      assert.strictEqual(isArray, true);
-    });
-
-    const length = result.length;
-    it('array length = 1', function() {
-      assert.strictEqual(length, 1);
-    });
-
-    const resultValue = result[0];
-    it('result = 0', function() {
-      assert.strictEqual(resultValue, 0);
-    });
-  });
-
   describe('test if side = 1, count = 6', function() {
     const result = rollDie({ count: 6, side: 1 });
     const isArray = Array.isArray(result);
@@ -98,7 +62,7 @@ describe('rollDie', function() {
     it('returns result type of array', function() {
       assert.strictEqual(isArray, true);
     });
-    
+
     const length = result.length;
     it('result array length = count modulo 100', function() {
       assert.strictEqual(length, 100);

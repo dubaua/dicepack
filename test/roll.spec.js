@@ -1,12 +1,10 @@
 import assert from 'assert';
-import { roll } from '../index.js';
+import { roll, Detailed } from '../index.js';
 
 describe('roll', function() {
   describe('returns a number', function() {
-    const result = roll('2d12+3d6+5');
-    const typeofResult = typeof result;
     it('returns result type of number', function() {
-      assert.strictEqual(typeofResult, 'number');
+      assert.strictEqual(typeof roll('2d12+3d6+5'), 'number');
     });
   });
 
@@ -20,17 +18,8 @@ describe('roll', function() {
 
   describe('returns detailed results if detailed flag given', function() {
     const result = roll('2d12+3d6+5', true);
-    const isDetailed = function(result) {
-      return (
-        result.hasOwnProperty('result') &&
-        result.hasOwnProperty('rolls') &&
-        typeof result.result === 'number' &&
-        Array.isArray(result.rolls)
-      );
-    };
-
-    it('returns result type of detailed', function() {
-      assert.strictEqual(isDetailed(result), true);
+    it('returns result type of Detailed', function() {
+      assert.strictEqual(result instanceof Detailed, true);
     });
 
     it('detailed rolls 2d12+3d6+5 length = 3, count of dice notation parts', function() {
@@ -50,9 +39,10 @@ describe('roll', function() {
     for (let i = 0; i < 1000; i++) {
       rolls.push(roll('d20'));
     }
-    const everyInRange = rolls.every(result => 1 <= result && result <= 20);
+    // An integer in range
+    const isValidResult = x => typeof x === 'number' && Math.round(x) === x && 1 <= x && x <= 20;
     it('every result in range 1..20', function() {
-      assert.strictEqual(everyInRange, true);
+      assert.strictEqual(rolls.every(isValidResult), true);
     });
   });
 });

@@ -2,6 +2,93 @@ const NOTATION_REGEXP = /^((-?)(\d+|\d*d\d+))([+-](\d+|\d*d\d+))*$/;
 const DICE_REGEXP = /^-?(\d+|\d*d\d+)$/;
 const STARTING_D_WIHTOUT_COUNT = /^(-?)d/;
 
+function addProperty({ value, key, validator, description, context }) {
+  if (typeof value === 'undefined') {
+    throw new TypeError(`${key} is required`);
+  }
+  if (typeof validator === 'function' && validator(value)) {
+    context[key] = value;
+  } else {
+    throw new TypeError(`expected ${key} is ${description}, got ${typeof value} ${value}.`);
+  }
+}
+
+class Dice {
+  constructor(count, side) {
+    addProperty({
+      value: count,
+      key: 'count',
+      validator: x => typeof x === 'number' && x !== 0 && Math.round(x) === x,
+      description: 'a non zero integer',
+      context: this,
+    });
+
+    addProperty({
+      value: side,
+      key: 'side',
+      validator: x => typeof x === 'number' && x > 0 && Math.round(x) === x,
+      description: 'a natural number',
+      context: this,
+    });
+  }
+}
+
+class Detailed {
+  constructor(result, rolls) {
+    addProperty({
+      value: result,
+      key: 'result',
+      validator: x => typeof x === 'number' && Math.round(x) === x,
+      description: 'an integer',
+      context: this,
+    });
+
+    addProperty({
+      value: rolls,
+      key: 'rolls',
+      validator: x => Array.isArray(x),
+      description: 'an array',
+      context: this,
+    });
+  }
+}
+
+class Stats {
+  constructor(distribution, average, variance, standardDeviation) {
+    addProperty({
+      value: distribution,
+      key: 'distribution',
+      validator: x => Array.isArray(x),
+      description: 'an array',
+      context: this,
+    });
+
+    addProperty({
+      value: average,
+      key: 'average',
+      validator: x => typeof x === 'number',
+      description: 'a number',
+      context: this,
+    });
+
+    addProperty({
+      value: variance,
+      key: 'variance',
+      validator: x => typeof x === 'number' && x >= 0,
+      description: 'a non negative number',
+      context: this,
+    });
+
+    addProperty({
+      value: standardDeviation,
+      key: 'standardDeviation',
+      validator: x => typeof x === 'number' && x >= 0,
+      description: 'a non negative number',
+      context: this,
+    });
+  }
+}
+
 const validate = function(string, regexp) {
   if (typeof string !== 'string' || !regexp.test(string)) {
     throw new Error(`Given expression ${string} isn't valid`);
@@ -16,10 +103,10 @@ const getDice = function(expression) {
     .replace(STARTING_D_WIHTOUT_COUNT, '$11d') // restore dropped 1d with sign 1d
     .split('d')
     .map(castToNumber);
-  return { count, side };
+  return new Dice(count, side);
 };
 
-const parse = expression =>
+const toDice = expression =>
   validate(expression, NOTATION_REGEXP)
     .replace(/-/g, '+-')
     .split('+')
@@ -28,12 +115,56 @@ const parse = expression =>
 
 const getRandomInt = max => Math.floor(Math.random() * max) + 1;
 
+const statsDice = function(dice) {
+  const independent = dice.reduce(function(accumulator, { count, side }) {
+    const rollCount = Math.abs(count);
+    const sign = Math.sign(count);
+    if (side === 1) {
+      accumulator.push([count]);
+    } else {
+      let dieProbabilities = [];
+      for (let result = 1; result <= side; result++) {
+        dieProbabilities.push(sign * result);
+      }
+      for (let die = 0; die < rollCount; die++) {
+        accumulator.push(dieProbabilities);
+      }
+    }
+    return accumulator;
+  }, []);
+
+  const combined = independent.reduce(directProduct, [0]);
+
+  const count = combined.length;
+
+  const chance = 1 / count;
+
+  const compact = combined
+    .map(result => ({ chance, result }))
+    .reduce((groups, { result, chance }) => {
+      const key = String(result);
+      if (!groups[key]) {
+        groups[key] = { result, chance };
+      } else {
+        groups[key].chance += chance;
+      }
+      return groups;
+    }, {});
+
+  const distribution = Object.values(compact).sort((a, b) => a.result - b.result);
+
+  const average = combined.reduce(sum, 0) / count;
+
+  const variance = combined.map(result => Math.pow(result - average, 2)).reduce(sum, 0) / count;
+
+  const standardDeviation = Math.sqrt(variance);
+
+  return new Stats(distribution, average, variance, standardDeviation);
+};
+
 const rollDie = function({ count, side }) {
   let results = [];
-  if (side === 0 || count === 0) {
-    // no need to roll 0
-    results.push(0);
-  } else if (side === 1) {
+  if (side === 1) {
     // no need to roll d1
     results.push(count);
   } else {
@@ -55,12 +186,11 @@ const sum = (accumulator, current) => accumulator + current;
 const flatten = (accumulator, current) =>
   Array.isArray(current) ? accumulator.concat(current.reduce(flatten, [])) : accumulator.concat(current);
 
+const directProduct = (accumulator, current) => current.map(x => accumulator.map(y => sum(x, y))).reduce(flatten, []);
+
 const collect = function(rolls, detailed) {
   const result = rolls.reduce(flatten, []).reduce(sum, 0);
-  if (detailed) {
-    return { result, rolls };
-  }
-  return result;
+  return detailed ? new Detailed(result, rolls) : result;
 };
 
 const rollDice = (dice, detailed) => collect(dice.map(rollDie), detailed);
@@ -69,10 +199,12 @@ const minDice = (dice, detailed) => collect(dice.map(minimize), detailed);
 
 const maxDice = (dice, detailed) => collect(dice.map(maximize), detailed);
 
-const roll = (expression, detailed) => rollDice(parse(expression), detailed);
+const roll = (expression, detailed) => rollDice(toDice(expression), detailed);
 
-const min = (expression, detailed) => minDice(parse(expression), detailed);
+const min = (expression, detailed) => minDice(toDice(expression), detailed);
 
-const max = (expression, detailed) => maxDice(parse(expression), detailed);
+const max = (expression, detailed) => maxDice(toDice(expression), detailed);
 
-export { parse, getDice, rollDie, minimize, maximize, rollDice, minDice, maxDice, roll, min, max };
+const stats = expression => statsDice(toDice(expression));
+
+export { Dice, Detailed, Stats, toDice, getDice, rollDie, rollDice, minDice, maxDice, statsDice, roll, min, max, stats };

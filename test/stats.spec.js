@@ -1,20 +1,7 @@
 import assert from 'assert';
-import { stats } from '../stats.js';
+import { stats, Stats } from '../index.js';
 
 const approximatelyEquals = (value1, value2, epsilon = 0.01) => Math.abs(value1 - value2) < epsilon;
-
-const isStats = function(result) {
-  return (
-    result.hasOwnProperty('average') &&
-    result.hasOwnProperty('variance') &&
-    result.hasOwnProperty('standardDeviation') &&
-    result.hasOwnProperty('distribution') &&
-    typeof result.average === 'number' &&
-    typeof result.variance === 'number' &&
-    typeof result.standardDeviation === 'number' &&
-    Array.isArray(result.distribution)
-  );
-};
 
 describe('stats', function() {
   describe('testing d6', function() {
@@ -22,7 +9,7 @@ describe('stats', function() {
     const { average, variance, standardDeviation, distribution } = result;
 
     it('returns result type of Stats', function() {
-      assert.strictEqual(isStats(result), true);
+      assert.strictEqual(result instanceof Stats, true);
     });
 
     const expectedAverage = (1 + 2 + 3 + 4 + 5 + 6) / 6;
@@ -32,11 +19,11 @@ describe('stats', function() {
 
     const expectedVariance =
       (Math.pow(1 - expectedAverage, 2) +
-        Math.pow(2 - expectedAverage, 2) +
-        Math.pow(3 - expectedAverage, 2) +
-        Math.pow(4 - expectedAverage, 2) +
-        Math.pow(5 - expectedAverage, 2) +
-        Math.pow(6 - expectedAverage, 2)) /
+       Math.pow(2 - expectedAverage, 2) +
+       Math.pow(3 - expectedAverage, 2) +
+       Math.pow(4 - expectedAverage, 2) +
+       Math.pow(5 - expectedAverage, 2) +
+       Math.pow(6 - expectedAverage, 2)) /
       6;
     it('variance ~= 2.92', function() {
       assert.strictEqual(approximatelyEquals(expectedVariance, variance), true);
@@ -61,7 +48,7 @@ describe('stats', function() {
     const { average, variance, standardDeviation, distribution } = result;
 
     it('returns result type of Stats', function() {
-      assert.strictEqual(isStats(result), true);
+      assert.strictEqual(result instanceof Stats, true);
     });
 
     const expectedAverage = (2 + 3 + 4 + 5 + 3 + 4 + 5 + 6 + 4 + 5 + 6 + 7 + 5 + 6 + 7 + 8) / 16;
@@ -71,21 +58,21 @@ describe('stats', function() {
 
     const expectedVariance =
       (Math.pow(2 - expectedAverage, 2) +
-        Math.pow(3 - expectedAverage, 2) +
-        Math.pow(4 - expectedAverage, 2) +
-        Math.pow(5 - expectedAverage, 2) +
-        Math.pow(3 - expectedAverage, 2) +
-        Math.pow(4 - expectedAverage, 2) +
-        Math.pow(5 - expectedAverage, 2) +
-        Math.pow(6 - expectedAverage, 2) +
-        Math.pow(4 - expectedAverage, 2) +
-        Math.pow(5 - expectedAverage, 2) +
-        Math.pow(6 - expectedAverage, 2) +
-        Math.pow(7 - expectedAverage, 2) +
-        Math.pow(5 - expectedAverage, 2) +
-        Math.pow(6 - expectedAverage, 2) +
-        Math.pow(7 - expectedAverage, 2) +
-        Math.pow(8 - expectedAverage, 2)) /
+       Math.pow(3 - expectedAverage, 2) +
+       Math.pow(4 - expectedAverage, 2) +
+       Math.pow(5 - expectedAverage, 2) +
+       Math.pow(3 - expectedAverage, 2) +
+       Math.pow(4 - expectedAverage, 2) +
+       Math.pow(5 - expectedAverage, 2) +
+       Math.pow(6 - expectedAverage, 2) +
+       Math.pow(4 - expectedAverage, 2) +
+       Math.pow(5 - expectedAverage, 2) +
+       Math.pow(6 - expectedAverage, 2) +
+       Math.pow(7 - expectedAverage, 2) +
+       Math.pow(5 - expectedAverage, 2) +
+       Math.pow(6 - expectedAverage, 2) +
+       Math.pow(7 - expectedAverage, 2) +
+       Math.pow(8 - expectedAverage, 2)) /
       16;
     it('variance ~= 2.5', function() {
       assert.strictEqual(approximatelyEquals(expectedVariance, variance), true);
@@ -114,7 +101,7 @@ describe('stats', function() {
     const { average, variance, standardDeviation, distribution } = result;
 
     it('returns result type of Stats', function() {
-      assert.strictEqual(isStats(result), true);
+      assert.strictEqual(result instanceof Stats, true);
     });
 
     it('average = 20.5', function() {

@@ -1,12 +1,13 @@
 import assert from 'assert';
-import { rollDice } from '../index.js';
+import { rollDice, Detailed } from '../index.js';
 
 describe('rollDice', function() {
   describe('returns a number', function() {
-    const result = rollDice([{ count: 2, side: 12 }, { count: 3, side: 6 }, { count: 5, side: 1 }]);
-    const typeofResult = typeof result;
     it('returns result type of number', function() {
-      assert.strictEqual(typeofResult, 'number');
+      assert.strictEqual(
+        typeof rollDice([{ count: 2, side: 12 }, { count: 3, side: 6 }, { count: 5, side: 1 }]),
+        'number'
+      );
     });
   });
 
@@ -20,17 +21,9 @@ describe('rollDice', function() {
 
   describe('returns detailed results if detailed flag given', function() {
     const result = rollDice([{ count: 2, side: 12 }, { count: 3, side: 6 }, { count: 5, side: 1 }], true);
-    const isDetailed = function(result) {
-      return (
-        result.hasOwnProperty('result') &&
-        result.hasOwnProperty('rolls') &&
-        typeof result.result === 'number' &&
-        Array.isArray(result.rolls)
-      );
-    };
 
-    it('returns result type of detailed', function() {
-      assert.strictEqual(isDetailed(result), true);
+    it('returns result type of Detailed', function() {
+      assert.strictEqual(result instanceof Detailed, true);
     });
 
     it('detailed rolls 2d12+3d6+5 length = 3, count of dice notation parts', function() {
