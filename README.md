@@ -18,9 +18,9 @@ Dice describes how to roll single dice notation.
 Detailed shows resulting number and show each roll result.
 
 | property | type                           | description               |
-| -------- | ----------------------------- -| ------------------------- |
+| -------- | -------------------------------| ------------------------- |
 | result   | `Number`                       | sum of all rolls, integer |
-| rolls    | `Array<Number\|Array<Number>>` | result of each part rolls |
+| rolls    | `Array<Number&#124;Array<Number>>` | result of each part rolls |
 
 ## Stats
 
