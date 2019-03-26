@@ -91,23 +91,23 @@ class Stats {
 
 const validate = function(string, regexp) {
   if (typeof string !== 'string' || !regexp.test(string)) {
-    throw new Error(`Given expression ${string} isn't valid`);
+    throw new Error(`Given notation ${string} isn't valid`);
   }
   return string;
 };
 
 const castToNumber = string => parseInt(string, 10) || 0;
 
-const getDice = function(expression) {
-  const [count = 1, side = 1] = validate(expression, DICE_REGEXP)
+const getDice = function(notation) {
+  const [count = 1, side = 1] = validate(notation, DICE_REGEXP)
     .replace(STARTING_D_WIHTOUT_COUNT, '$11d') // restore dropped 1d with sign 1d
     .split('d')
     .map(castToNumber);
   return new Dice(count, side);
 };
 
-const toDice = expression =>
-  validate(expression, NOTATION_REGEXP)
+const toDice = notation =>
+  validate(notation, NOTATION_REGEXP)
     .replace(/-/g, '+-')
     .split('+')
     .filter(string => string !== '')
@@ -195,16 +195,29 @@ const collect = function(rolls, detailed) {
 
 const rollDice = (dice, detailed) => collect(dice.map(rollDie), detailed);
 
-const minDice = (dice, detailed) => collect(dice.map(minimize), detailed);
+const minDice = dice => collect(dice.map(minimize));
 
-const maxDice = (dice, detailed) => collect(dice.map(maximize), detailed);
+const maxDice = dice => collect(dice.map(maximize));
 
-const roll = (expression, detailed) => rollDice(toDice(expression), detailed);
+const roll = (notation, detailed) => rollDice(toDice(notation), detailed);
 
-const min = (expression, detailed) => minDice(toDice(expression), detailed);
+const min = notation => minDice(toDice(notation));
 
-const max = (expression, detailed) => maxDice(toDice(expression), detailed);
+const max = notation => maxDice(toDice(notation));
 
-const stats = expression => statsDice(toDice(expression));
+const stats = notation => statsDice(toDice(notation));
 
-export { Dice, Detailed, Stats, toDice, getDice, rollDie, rollDice, minDice, maxDice, statsDice, roll, min, max, stats };
+class DiceSet {
+  constructor(notation) {
+    this.dice = toDice(notation);
+    this.min = minDice(this.dice);
+    this.max = maxDice(this.dice);
+    this.mean = (this.max - this.min) / 2 + this.min;
+    this.roll = detailed => rollDice(this.dice, detailed);
+    this.stats = detailed => statsDice(this.dice, detailed);
+  }
+}
+
+const getDiceSet = notation => new DiceSet(notation);
+
+// export { Dice, Detailed, Stats, toDice, getDice, rollDie, getDiceSet, roll, min, max, stats };
