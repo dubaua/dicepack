@@ -40,7 +40,7 @@ variance and standard deviation.
 
 `roll(notation: String, ?detailed: Boolean) => number | Detailed`
 
-Accept dice notation string and optional detailed flag. Return resulting roll as number or [Detailed](https://github.com/dubaua/roll-notation#detailed) if flag given.
+Accept dice notation string and optional detailed flag. Return resulting roll as number or [Detailed](https://github.com/dubaua/roll-expression#detailed) if flag given.
 
 ```
 roll('2d6+3')         => 5..15
@@ -79,7 +79,7 @@ max('d6-d6')  => 5
 
 `stats(notation: String) => Stats`
 
-Accept dice notation string. Returns [Stats](https://github.com/dubaua/roll-notation#stats) including distribution array, average, variance and standart derivation.
+Accept dice notation string. Returns [Stats](https://github.com/dubaua/roll-expression#stats) including distribution array, average, variance and standart derivation.
 
 ```
 stats('d6') => {
