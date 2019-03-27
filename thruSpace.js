@@ -11,7 +11,9 @@ const yRange = getDiceSet(`2d${Math.round(screenHeight/2)}`);
 
 const body = document.body;
 
-function drawStar() {
+const starLife = 1000
+
+function drawStar(id) {
   body.appendChild(create('div', {
     style: {
       left: `${xRange.roll()}px`,
@@ -22,12 +24,19 @@ function drawStar() {
       borderRadius: '2px',
       backgroundColor: 'white'
     },
+    ref: bindReference(refs, `star-${id}`),
   }));
+  let starLifeTimerId = setTimeout(() => {
+    refs[`star-${id}`].remove();
+    clearTimeout(starLifeTimerId);
+  }, starLife);
 }
 
 const delay = 16;
+let starCount = 0;
 
 let drawStartTimerId = setTimeout(function tick() {
-  // drawStar();
-  drawStartTimerId = setTimeout(tick, delay); // (*)
+  drawStar(starCount++);
+
+  if (starCount < 1000) drawStartTimerId = setTimeout(tick, delay); // (*)
 }, delay);

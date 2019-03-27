@@ -220,4 +220,4 @@ class DiceSet {
 
 const getDiceSet = notation => new DiceSet(notation);
 
-// export { Dice, Detailed, Stats, toDice, getDice, rollDie, getDiceSet, roll, min, max, stats };
+export { Dice, Detailed, Stats, toDice, getDice, rollDie, getDiceSet, roll, min, max, stats };
