@@ -11,8 +11,32 @@
     background: black;
     overflow: hidden;
   }
+  .track {
+    position: absolute;
+    width: 50%;
+    left: 50%;
+    top: 50%;
+    height: 1px;
+    transform-origin: left top;
+    transform: rotate(45deg);
+  }
+  .star {
+    width: 2px;
+    height: 2px;
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+    animation: fly 4s linear infinite;
+  }
+
+  @keyframes fly {
+    100% {
+      transform: translateX(50vw) scale(3);
+    }
+  }
   </style>
   <body>
+    <div class="track"><div class="star"></div></div>
     <script src="thruSpace.js"></script>
   </body>
 </html>
