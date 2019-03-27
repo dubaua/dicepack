@@ -2,6 +2,10 @@
 
 Provides set of methods for rolling dice notation strings.
 
+# Where can it be useful?
+
+This tool isn't only for board game geeks. 
+
 # Types
 
 ## Dice
