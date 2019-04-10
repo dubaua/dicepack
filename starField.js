@@ -15,6 +15,7 @@ let screenHeight;
 let screenCenterY;
 let xRange;
 let yRange;
+let entropy = 0.2;
 
 function onResize() {
   screenWidth = window.innerWidth;
@@ -37,6 +38,7 @@ class Star {
 
     const distance = Math.abs(this.y - screenCenterY) / screenCenterY;
     this.acceleration = speed * (1 + easingSinusoidalIn(distance));
+    this.acceleration += entropy - Math.random() * entropy;
 
     starIndex++;
     stars[starIndex] = this;
