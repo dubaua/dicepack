@@ -6,10 +6,10 @@ const stars = {};
 
 // settings
 const speed = 1;
-const colorRange = getDiceSet(`d64+191`);
 const starSize = 1;
 const depth = 1;
 const entropy = 0.2;
+const starsDensity = 1e-3;
 
 let starIndex = 0;
 let numStars = 0;
@@ -21,8 +21,8 @@ let xRange;
 let yRange;
 
 class Star {
-  constructor(initial) {
-    this.x = initial ? xRange.roll() : screenWidth;
+  constructor() {
+    this.x = xRange.roll();
     this.y = yRange.roll();
 
     this.distance = Math.abs(this.y - screenCenterY) / screenCenterY;
@@ -33,7 +33,7 @@ class Star {
     starIndex++;
     stars[starIndex] = this;
 
-    this.color = `rgba(${colorRange.roll()}, ${colorRange.roll()}, ${colorRange.roll()}, 1)`;
+    this.color = 'white';
     this.id = starIndex;
   }
 
@@ -41,8 +41,13 @@ class Star {
     this.x = this.x - this.acceleration;
 
     if (this.x < 0) {
-      delete stars[this.id];
-      numStars--;
+      if (numStars <= starsToDraw) {
+        this.x = screenWidth;
+        this.y = yRange.roll();
+      } else {
+        delete stars[this.id];
+        numStars--;
+      }
     }
 
     ctx.fillStyle = this.color;
@@ -50,33 +55,39 @@ class Star {
   }
 }
 
-function draw(initial) {
-  return function() {
+function draw() {
+  // resize canvas on window resize
+  if (screenWidth != window.innerWidth) {
     screenWidth = window.innerWidth;
+    xRange = getDiceSet(`d${Math.round(screenWidth)}`);
+    field.width = screenWidth;
+  }
+
+  if (screenHeight != window.innerHeight) {
     screenHeight = window.innerHeight;
     screenCenterY = Math.round(screenHeight / 2);
-    xRange = getDiceSet(`d${Math.round(screenWidth)}`);
     yRange = getDiceSet(`2d${Math.round(screenHeight / 2)}`);
-    field.width = screenWidth;
     field.height = screenHeight;
-    starsToDraw = (screenWidth * screenHeight) / 1e3;
-
-    ctx.fillStyle = `rgba(0, 0, 0, 1)`;
-    ctx.fillRect(0, 0, field.width, field.height);
-  
-    for (var i = numStars; i < starsToDraw; i++) {
-      new Star(initial);
-      numStars++;
-    }
-  
-    for (var star in stars) {
-      stars[star].draw();
-    }
-    requestAnimationFrame(draw());
   }
+  
+  starsToDraw = Math.ceil(screenWidth * screenHeight * starsDensity);
+
+  ctx.fillStyle = `rgba(0, 0, 0, 1)`;
+  ctx.fillRect(0, 0, field.width, field.height);
+
+  for (var i = numStars; i < starsToDraw; i++) {
+    new Star();
+    numStars++;
+  }
+
+  for (var star in stars) {
+    stars[star].draw();
+  }
+
+  requestAnimationFrame(draw);
 }
 
-requestAnimationFrame(draw(true));
+requestAnimationFrame(draw);
 
 function easingSinusoidalIn(t) {
   return -Math.cos((t * Math.PI) / 2) + 1;
