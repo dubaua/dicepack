@@ -3,16 +3,16 @@ import { create } from './render.js';
 
 const field = document.getElementById('space');
 const ctx = field.getContext('2d');
-const stars = {};
+window.stars = {};
 
 const settings = {
   speed: {
     min: 1,
-    max: 5,
+    max: 10,
     value: 3,
     step: 0.5,
   },
-  starSize: {
+  size: {
     min: 1,
     max: 5,
     value: 1,
@@ -30,19 +30,21 @@ const settings = {
     value: 0.2,
     step: 0.1,
   },
-  starsDensity: {
-    min: 1e-3,
-    max: 1e-4,
-    value: 1e-3,
-    step: 1e-4,
+  density: {
+    min: 1,
+    max: 20,
+    value: 1,
+    step: 1,
   },
   gravity: {
     min: 1,
     max: 5,
-    value: 2,
-    step: 0.5,
+    value: 1,
+    step: 0.1,
   },
 };
+
+const gravityRange = getDiceSet(`d${Math.round(settings.gravity.max)}`);
 
 let starIndex = 0;
 let numStars = 0;
@@ -57,12 +59,8 @@ class Star {
   constructor() {
     this.x = xRange.roll();
     this.y = yRange.roll();
-
-    this.distance = Math.abs(this.y - screenCenterY) / screenCenterY;
-    this.acceleration = settings.speed.value;
-    this.acceleration += settings.depth.value * easingSinusoidalIn(this.distance);
-    this.acceleration += settings.entropy.value - Math.random() * settings.entropy.value;
-
+    this.gravityFactor = gravityRange.roll();
+    this.force = this.y === screenCenterY ? screenCenterY : this.gravityFactor / (this.y - screenCenterY) * screenCenterY;
     starIndex++;
     stars[starIndex] = this;
 
@@ -71,20 +69,31 @@ class Star {
   }
 
   draw() {
-    this.x = this.x - this.acceleration;
-
     if (this.x < 0) {
       if (numStars <= starsToDraw) {
         this.x = screenWidth;
         this.y = yRange.roll();
+        this.force = this.y === screenCenterY ? screenCenterY : this.gravityFactor / (this.y - screenCenterY) * screenCenterY;
       } else {
         delete stars[this.id];
         numStars--;
       }
     }
 
+    this._y = this.y - Math.abs(this.y - screenCenterY) / this.force / settings.gravity.max * settings.gravity.value;
+
+    this.distance = Math.abs((this._y - screenCenterY) / screenCenterY);
+
+    this.speed = settings.speed.value;
+    this.acceleration =
+      settings.depth.value * easingSinusoidalIn(this.distance) +
+      settings.entropy.value -
+      Math.random() * settings.entropy.value;
+
+    this.x = this.x - this.speed - this.acceleration;
+
     ctx.fillStyle = this.color;
-    ctx.fillRect(this.x, this.y, settings.starSize.value, settings.starSize.value);
+    ctx.fillRect(this.x, this._y, settings.size.value, settings.size.value);
   }
 }
 
@@ -99,11 +108,12 @@ function draw() {
   if (screenHeight != window.innerHeight) {
     screenHeight = window.innerHeight;
     screenCenterY = Math.round(screenHeight / 2);
-    yRange = getDiceSet(`${settings.gravity.value}d${Math.round((screenHeight / settings.gravity.value) + 1)}-${settings.gravity.value}`);
+    yRange = getDiceSet(`d${Math.round(screenHeight)}`);
     field.height = screenHeight;
   }
-  
-  starsToDraw = Math.ceil(screenWidth * screenHeight * settings.starsDensity.value);
+
+  // rework couning
+  starsToDraw = Math.ceil(Math.sqrt(screenWidth * screenHeight)) * settings.density.value / 2;
 
   ctx.fillStyle = `rgba(0, 0, 0, 1)`;
   ctx.fillRect(0, 0, field.width, field.height);
@@ -122,33 +132,39 @@ function draw() {
 
 requestAnimationFrame(draw);
 
-var settingsElement = create('div.settings', {}, Object.keys(settings).map(key => create('div.settings__slider', {}, [
-  [
-    'label.settings__label',
-    { 
-      attributes: { for: key },
-      domProps: { innerHTML: key }
-    }
-  ],
-  [
-    'input.settings__input',
-    { 
-      attributes: {
-        id: key,
-        type: 'range',
-        min: settings[key].min,
-        max: settings[key].max,
-        value: settings[key].value,
-        step: settings[key].step,
-      },
-      listeners: {
-        input(e) {
-          settings[key].value = Number(e.target.value);
-        }
-      }
-    }
-  ],
-])));
+var settingsElement = create(
+  'div.settings',
+  {},
+  Object.keys(settings).map(key =>
+    create('div.settings__slider', {}, [
+      [
+        'label.settings__label',
+        {
+          attributes: { for: key },
+          domProps: { innerHTML: key },
+        },
+      ],
+      [
+        'input.settings__input',
+        {
+          attributes: {
+            id: key,
+            type: 'range',
+            min: settings[key].min,
+            max: settings[key].max,
+            value: settings[key].value,
+            step: settings[key].step,
+          },
+          listeners: {
+            input(e) {
+              settings[key].value = Number(e.target.value);
+            },
+          },
+        },
+      ],
+    ])
+  )
+);
 
 document.body.appendChild(settingsElement);
 
