@@ -3,48 +3,41 @@ import { create } from './render.js';
 
 const field = document.getElementById('space');
 const ctx = field.getContext('2d');
-window.stars = {};
+const gravity = 3;
+const stars = {};
 
 const settings = {
   speed: {
-    min: 1,
-    max: 10,
-    value: 3,
-    step: 0.5,
-  },
-  size: {
-    min: 1,
-    max: 5,
-    value: 1,
-    step: 1,
+    min: 0.3,
+    max: 4.5,
+    value: 1.5,
+    step: 0.3,
   },
   depth: {
     min: 1,
     max: 5,
-    value: 1,
+    value: 2.5,
     step: 0.5,
   },
   entropy: {
     min: 0,
-    max: 1,
-    value: 0.2,
+    max: 3,
+    value: 0.5,
     step: 0.1,
   },
   density: {
     min: 1,
-    max: 20,
-    value: 1,
+    max: 15,
+    value: 8,
     step: 1,
   },
   gravity: {
     min: 1,
-    max: 5,
-    value: 1,
-    step: 0.1,
+    max: 1000,
+    value: 500,
+    step: 1,
   },
 };
-
-const gravityRange = getDiceSet(`d${Math.round(settings.gravity.max)}`);
 
 let starIndex = 0;
 let numStars = 0;
@@ -59,8 +52,7 @@ class Star {
   constructor() {
     this.x = xRange.roll();
     this.y = yRange.roll();
-    this.gravityFactor = gravityRange.roll();
-    this.force = this.y === screenCenterY ? screenCenterY : this.gravityFactor / (this.y - screenCenterY) * screenCenterY;
+    this.entropy = settings.entropy.value - Math.random() * settings.entropy.value;
     starIndex++;
     stars[starIndex] = this;
 
@@ -73,27 +65,23 @@ class Star {
       if (numStars <= starsToDraw) {
         this.x = screenWidth;
         this.y = yRange.roll();
-        this.force = this.y === screenCenterY ? screenCenterY : this.gravityFactor / (this.y - screenCenterY) * screenCenterY;
       } else {
         delete stars[this.id];
         numStars--;
       }
     }
 
-    this._y = this.y - Math.abs(this.y - screenCenterY) / this.force / settings.gravity.max * settings.gravity.value;
-
-    this.distance = Math.abs((this._y - screenCenterY) / screenCenterY);
-
     this.speed = settings.speed.value;
-    this.acceleration =
-      settings.depth.value * easingSinusoidalIn(this.distance) +
-      settings.entropy.value -
-      Math.random() * settings.entropy.value;
+    this.distance = Math.abs((this.y - screenCenterY) / screenCenterY);
+    
+    this._y = this.y - (this.y - screenCenterY) * easingSinusoidalIn(1 - this.distance) * (settings.gravity.value / settings.gravity.max);
+    this._distance = Math.abs((this._y - screenCenterY) / screenCenterY);
 
+    this.acceleration = settings.depth.value * easingSinusoidalIn(this.distance) + this.entropy;
     this.x = this.x - this.speed - this.acceleration;
 
     ctx.fillStyle = this.color;
-    ctx.fillRect(this.x, this._y, settings.size.value, settings.size.value);
+    ctx.fillRect(this.x, this._y, 1, 1);
   }
 }
 
@@ -109,6 +97,7 @@ function draw() {
     screenHeight = window.innerHeight;
     screenCenterY = Math.round(screenHeight / 2);
     yRange = getDiceSet(`d${Math.round(screenHeight)}`);
+    yRange = getDiceSet(`${gravity}d${Math.round((screenHeight / gravity) + 1)}-${gravity}`);
     field.height = screenHeight;
   }
 
