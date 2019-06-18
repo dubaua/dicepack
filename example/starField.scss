@@ -1,0 +1,132 @@
+body {
+  background: black;
+  overflow: hidden;
+  margin: 0;
+}
+
+.settings {
+  position: fixed;
+  bottom: 1em;
+  left: 50%;
+  transform: translate(-50%);
+  z-index: 1;
+  display: flex;
+
+  &__param {
+    margin: 0 0.67em;
+  }
+
+  &__label {
+    display: flex;
+    justify-content: space-between;
+    color: white;
+    font: 12px/1 monospace;
+    margin-bottom: 3px;
+  }
+
+  &__property {
+    display: block;
+  }
+
+  &__value {
+    display: block;
+  }
+}
+
+$track-height: 15px;
+$track-color: white;
+$track-border: none;
+$track-shadow: inset 0 7px 0 black, inset 0 -7px 0 black;
+$track-border-radius: 0;
+
+$handle-width: 7px;
+$handle-height: 15px;
+$handle-color: none;
+$handle-border: none;
+$handle-shadow: inset 3px 0 0 white, inset -3px 0 0 white;
+$handle-border-radius: 0;
+
+input[type='range'] {
+  -webkit-appearance: none;
+  width: 100%;
+  margin: ($handle-height - $track-height) * 0.5 0;
+}
+input[type='range']:focus {
+  outline: none;
+}
+input[type='range']::-webkit-slider-runnable-track {
+  width: 100%;
+  height: $track-height;
+  background: $track-color;
+  border-radius: $track-border-radius;
+  border: $track-border;
+  box-shadow: $track-shadow;
+  cursor: pointer;
+}
+input[type='range']::-webkit-slider-thumb {
+  width: $handle-width;
+  height: $handle-height;
+  margin-top: ($track-height - $handle-height) * 0.5;
+  background: $handle-color;
+  border-radius: $handle-border-radius;
+  border: $handle-border;
+  box-shadow: $handle-shadow;
+  cursor: pointer;
+  -webkit-appearance: none;
+}
+input[type='range']:focus::-webkit-slider-runnable-track {
+  background: $track-color;
+}
+input[type='range']::-moz-range-track {
+  width: 100%;
+  height: $track-height;
+  background: $track-color;
+  border-radius: $track-border-radius;
+  border: $track-border;
+  box-shadow: $track-shadow;
+  cursor: pointer;
+}
+input[type='range']::-moz-range-thumb {
+  width: $handle-width;
+  height: $handle-height;
+  background: $handle-color;
+  border-radius: $handle-border-radius;
+  border: $handle-border;
+  box-shadow: $handle-shadow;
+  cursor: pointer;
+}
+input[type='range']::-ms-track {
+  width: 100%;
+  height: $track-height;
+  background: transparent;
+  border-color: transparent;
+  color: transparent;
+  cursor: pointer;
+}
+input[type='range']::-ms-fill-lower {
+  background: $track-color;
+  border-radius: $track-border-radius;
+  border: $track-border;
+  box-shadow: $track-shadow;
+}
+input[type='range']::-ms-fill-upper {
+  background: $track-color;
+  border-radius: $track-border-radius;
+  border: $track-border;
+  box-shadow: $track-shadow;
+}
+input[type='range']::-ms-thumb {
+  width: $handle-width;
+  height: $handle-height;
+  background: $handle-color;
+  border-radius: $handle-border-radius;
+  border: $handle-border;
+  box-shadow: $handle-shadow;
+  cursor: pointer;
+}
+input[type='range']:focus::-ms-fill-lower {
+  background: $track-color;
+}
+input[type='range']:focus::-ms-fill-upper {
+  background: $track-color;
+}
