@@ -1,6 +1,6 @@
 # Simple dice notation roller
 
-Provides set of methods for rolling dice notation strings.
+Provides set of methods for rolling dice notation strings. There are many other dice roller implementations, but if lovesong already exist that doesn't mean you shouldn't write own one.
 
 # Where can it be useful?
 
@@ -123,7 +123,7 @@ stats('d6') => {
 
 `getDiceSet(notation: String) => DiceSet`
 
-Accept dice notation string. Returns DiceSet class that provides calculated min, max and mean properties and roll and stats methods.
+Accept dice notation string. Returns DiceSet instance providing `min`, `max` and `mean` properties and `roll` and `stats` methods.
 
 ```
 const diceSet = getDiceSet('2d6+3');
