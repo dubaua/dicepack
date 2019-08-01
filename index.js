@@ -55,7 +55,7 @@ class Result {
       value: rolled,
       key: 'rolled',
       validator: x => typeof x === 'number' && x !== 0 && Math.round(x) === x,
-      description: 'a non zero integer',
+      description: 'a natural number',
       context: this,
     });
   }
@@ -252,15 +252,54 @@ const stats = notation => statsDice(toDice(notation));
 
 class DiceSet {
   constructor(notation) {
-    this.dice = toDice(notation);
+    this.notation = notation;
+    this.dice = toDice(this.notation);
     this.min = minDice(this.dice);
     this.max = maxDice(this.dice);
     this.mean = (this.max - this.min) / 2 + this.min;
     this.roll = detailed => rollDice(this.dice, detailed);
     this.stats = detailed => statsDice(this.dice, detailed);
+    this.normalize = () => {
+      const normalized = normalize(this.notation);
+      this.notation = normalized;
+      this.dice = toDice(normalized);
+      return normalized;
+    };
   }
 }
 
 const getDiceSet = notation => new DiceSet(notation);
 
-export { Dice, Result, Detailed, Stats, toDice, getDice, rollDie, getDiceSet, roll, min, max, stats };
+const normalize = notation =>
+  toDice(notation.replace(/\s/g, '').toLowerCase())
+    .reduce((accumulator, { count, side }) => {
+      if (side !== 1 && count < 0) {
+        // turn positive
+        accumulator.push({ count: Math.abs(count), side });
+        // adjust negative modifier
+        accumulator.push({ count: count * (side + 1), side: 1 });
+      } else {
+        // push as is
+        accumulator.push({ count, side });
+      }
+      return accumulator;
+    }, [])
+    .sort((a, b) => b.side - a.side)
+    .reduce((accumulator, { count, side }) => {
+      // group same sided dice
+      if (accumulator.length && side === accumulator[accumulator.length - 1].side) {
+        accumulator[accumulator.length - 1].count += count;
+      } else {
+        accumulator.push({ count, side });
+      }
+      return accumulator;
+    }, [])
+    // turn to string array
+    .map(
+      ({ side, count }) =>
+        `${count < 0 ? '-' : ''}${Math.abs(count) === 1 && side !== 1 ? '' : Math.abs(count)}${side !== 1 ? 'd' + side : ''}`
+    )
+    .join('+')
+    .replace('+-', '-');
+
+export { Dice, Result, Detailed, Stats, toDice, getDice, rollDie, getDiceSet, roll, min, max, stats, normalize };
