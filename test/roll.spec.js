@@ -1,5 +1,5 @@
 import assert from 'assert';
-import { roll, Detailed } from '../index.js';
+import { roll, Result, Detailed } from '../index.js';
 
 describe('roll', function() {
   describe('returns a number', function() {
@@ -20,6 +20,11 @@ describe('roll', function() {
     const result = roll('2d12+3d6+5', true);
     it('returns result type of Detailed', function() {
       assert.strictEqual(result instanceof Detailed, true);
+    });
+
+    const allRollsAreResults = result.rolls.every(roll => roll.every(result => result instanceof Result));
+    it('all resulting rolls are type of Result', function() {
+      assert.strictEqual(allRollsAreResults, true);
     });
 
     it('detailed rolls 2d12+3d6+5 length = 3, count of dice notation parts', function() {

@@ -14,7 +14,7 @@ function addProperty({ value, key, validator, description, context }) {
 }
 
 class Dice {
-  constructor(count, side) {
+  constructor({ count, side }) {
     addProperty({
       value: count,
       key: 'count',
@@ -33,8 +33,36 @@ class Dice {
   }
 }
 
+class Result {
+  constructor({ type, side, rolled }) {
+    addProperty({
+      value: type,
+      key: 'type',
+      validator: x => x === 'die' || x === 'number',
+      description: "string 'die' or 'number'",
+      context: this,
+    });
+
+    addProperty({
+      value: side,
+      key: 'side',
+      validator: x => typeof x === 'number' && x > 0 && Math.round(x) === x,
+      description: 'a natural number',
+      context: this,
+    });
+
+    addProperty({
+      value: rolled,
+      key: 'rolled',
+      validator: x => typeof x === 'number' && x !== 0 && Math.round(x) === x,
+      description: 'a non zero integer',
+      context: this,
+    });
+  }
+}
+
 class Detailed {
-  constructor(result, rolls) {
+  constructor({ result, rolls }) {
     addProperty({
       value: result,
       key: 'result',
@@ -46,15 +74,15 @@ class Detailed {
     addProperty({
       value: rolls,
       key: 'rolls',
-      validator: x => Array.isArray(x),
-      description: 'an array',
+      validator: x => Array.isArray(x) && x.every(y => Array.isArray(y) && y.every(z => z instanceof Result)),
+      description: 'an array of Results',
       context: this,
     });
   }
 }
 
 class Stats {
-  constructor(distribution, average, variance, standardDeviation) {
+  constructor({ distribution, average, variance, standardDeviation }) {
     addProperty({
       value: distribution,
       key: 'distribution',
@@ -103,7 +131,7 @@ const getDice = function(notation) {
     .replace(STARTING_D_WIHTOUT_COUNT, '$11d') // restore dropped 1d with sign 1d
     .split('d')
     .map(castToNumber);
-  return new Dice(count, side);
+  return new Dice({ count, side });
 };
 
 const toDice = notation =>
@@ -159,7 +187,7 @@ const statsDice = function(dice) {
 
   const standardDeviation = Math.sqrt(variance);
 
-  return new Stats(distribution, average, variance, standardDeviation);
+  return new Stats({ distribution, average, variance, standardDeviation });
 };
 
 const rollDie = function({ count, side }) {
@@ -188,12 +216,27 @@ const flatten = (accumulator, current) =>
 
 const directProduct = (accumulator, current) => current.map(x => accumulator.map(y => sum(x, y))).reduce(flatten, []);
 
-const collect = function(rolls, detailed) {
+const collect = function(rolls, detailed, dice) {
   const result = rolls.reduce(flatten, []).reduce(sum, 0);
-  return detailed ? new Detailed(result, rolls) : result;
+
+  // collecting rolls against dice config
+  if (detailed) {
+    const _rolls = dice.map((die, index) =>
+      rolls[index].map(
+        roll =>
+          new Result({
+            type: die.side === 1 ? 'number' : 'die',
+            side: die.side,
+            rolled: roll,
+          })
+      )
+    );
+    return new Detailed({ result, rolls: _rolls });
+  }
+  return result;
 };
 
-const rollDice = (dice, detailed) => collect(dice.map(rollDie), detailed);
+const rollDice = (dice, detailed) => collect(dice.map(rollDie), detailed, dice);
 
 const minDice = dice => collect(dice.map(minimize));
 
@@ -220,4 +263,4 @@ class DiceSet {
 
 const getDiceSet = notation => new DiceSet(notation);
 
-export { Dice, Detailed, Stats, toDice, getDice, rollDie, getDiceSet, roll, min, max, stats };
+export { Dice, Result, Detailed, Stats, toDice, getDice, rollDie, getDiceSet, roll, min, max, stats };
