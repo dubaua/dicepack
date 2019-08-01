@@ -29,7 +29,7 @@ Result describes which dice was rolled and result. Used to present results.
 
 ## Detailed
 
-Detailed shows sum of rolls and [Result](https://github.com/dubaua/roll-expression#result for each dice group.
+Detailed shows sum of rolls and [Result](https://github.com/dubaua/roll-expression#result) for each dice group.
 
 | property | type                   | description                 |
 | -------- | ---------------------- | --------------------------- |
