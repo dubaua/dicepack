@@ -13,11 +13,12 @@
   "author": "dubaua <dubaua@gmail.com>",
   "license": "MIT",
   "devDependencies": {
-    "@babel/core": "^7.3.4",
+    "@babel/core": "^7.0.0-0",
+    "@babel/preset-env": "^7.5.5",
     "@babel/register": "^7.0.0",
     "mocha": "^6.0.2",
     "parcel-bundler": "^1.11.0",
-    "sass": "^1.21.0"
+    "sass": "^1.22.7"
   },
   "scripts": {
     "test": "mocha --require @babel/register ./test/**/*.spec.js",
