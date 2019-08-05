@@ -2,7 +2,10 @@
   "name": "roll-expression",
   "version": "1.0.0",
   "description": "Simple, blazing fast, no dependencies dice notation roller library",
-  "main": "source/index.js",
+  "source": "source/index.js",
+  "main": "dist/roll-expression.min.js",
+  "umd:main": "dist/roll-expression.umd.js",
+  "module": "dist/roll-expression.mjs",
   "keywords": [
     "roll",
     "dice",
@@ -18,6 +21,7 @@
     "@babel/core": "^7.0.0-0",
     "@babel/preset-env": "^7.5.5",
     "@babel/register": "^7.0.0",
+    "microbundle": "^0.11.0",
     "mocha": "^6.0.2",
     "parcel-bundler": "^1.11.0",
     "rimraf": "^2.6.3",
@@ -25,6 +29,17 @@
   },
   "scripts": {
     "test": "mocha --require @babel/register ./**/*.spec.js",
-    "build": "parcel build index.js"
+    "build": "rimraf dist && microbundle --name RollExpression --strict"
+  },
+  "minify": {
+    "mangle": {
+      "reserved": [
+        "Stats",
+        "Details",
+        "Result",
+        "Dice",
+        "DiceSet"
+      ]
+    }
   }
 }
