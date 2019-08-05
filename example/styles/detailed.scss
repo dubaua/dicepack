@@ -1,0 +1,42 @@
+@import './shared.scss';
+
+.detailed {
+  display: flex;
+  flex-wrap: wrap;
+
+  &__group {
+    display: flex;
+    margin: 3px 12px 3px 0;
+  }
+
+  $size: 48px;
+
+  &__die {
+    position: relative;
+    display: block;
+    width: $size;
+    height: $size;
+  }
+
+  &__die-icon {
+    width: 100%;
+    height: 100%;
+  }
+
+  &__die-result {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    color: white;
+    text-shadow: 0 1px 1px rgba(0,0,0,.38);
+  }
+
+  &__number,
+  &__die-result {
+    font-size: 24px;
+    line-height: $size;
+    text-align: center;
+  }
+}

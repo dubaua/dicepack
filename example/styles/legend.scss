@@ -1,0 +1,12 @@
+@import './shared.scss';
+
+.legend {
+  &__ruler {
+    line-height: $legend-line-height;
+    position: absolute;
+    left: -2em;
+    right: 0;
+    color: rgba($color-ui, 0.8);
+    border-bottom: 1px solid rgba($color-ui, 0.2);
+  }
+}

@@ -1,0 +1,11 @@
+@import './shared.scss';
+
+.results {
+  &__result {
+    font-size: 48px;
+    margin-right: 0.38em;
+  }
+  &__chance {
+    color: rgba($color-ui, 0.62);
+  }
+}

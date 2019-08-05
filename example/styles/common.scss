@@ -1,0 +1,13 @@
+@import './shared.scss';
+
+body {
+  overflow: hidden;
+  margin: 0;
+  font-family: 'Cousine', monospace; // for russian
+  font-family: 'Space Mono', monospace;
+}
+
+button,
+input {
+  font: inherit;
+}

@@ -1,0 +1,10 @@
+@import './shared.scss';
+
+.control {
+  &__input,
+  &__button {
+    font-size: 24px;
+    padding: 0.38em 0.62em;
+    margin: 0;
+  }
+}

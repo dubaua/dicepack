@@ -1,0 +1,13 @@
+@import './shared.scss';
+
+.example {
+  display: inline-block;
+  font-size: 12px;
+  margin-left: 1em;
+  color: rgba($color-ui, 0.62);
+
+  &__notation {
+    text-decoration: underline;
+    cursor: pointer;
+  }
+}
