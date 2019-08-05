@@ -2,6 +2,15 @@ const NOTATION_REGEXP = /^((-?)(\d+|\d*d\d+))([+-](\d+|\d*d\d+))*$/;
 const DICE_REGEXP = /^-?(\d+|\d*d\d+)$/;
 const STARTING_D_WIHTOUT_COUNT = /^(-?)d/;
 
+/*
+ * [A-Z]+       captures uppercase
+ * \s           captures spaces
+ * d1(\D+|$)    captures d1
+ * (\D+|^)1d\d+ captures 1dN
+ * -(\d*)d      captures negative dice
+*/
+const NOT_NORMALIZED_REGEXP = /[A-Z]+|\s|d1(\D+|$)|(\D+|^)1d\d+|-(\d*)d/;
+
 function addProperty({ value, key, validator, description, context }) {
   if (typeof value === 'undefined') {
     throw new TypeError(`${key} is required`);
@@ -270,36 +279,69 @@ class DiceSet {
 
 const getDiceSet = notation => new DiceSet(notation);
 
-const normalize = notation =>
-  toDice(notation.replace(/\s/g, '').toLowerCase())
-    .reduce((accumulator, { count, side }) => {
-      if (side !== 1 && count < 0) {
-        // turn positive
-        accumulator.push({ count: Math.abs(count), side });
-        // adjust negative modifier
-        accumulator.push({ count: count * (side + 1), side: 1 });
-      } else {
-        // push as is
-        accumulator.push({ count, side });
-      }
-      return accumulator;
-    }, [])
-    .sort((a, b) => b.side - a.side)
-    .reduce((accumulator, { count, side }) => {
-      // group same sided dice
-      if (accumulator.length && side === accumulator[accumulator.length - 1].side) {
-        accumulator[accumulator.length - 1].count += count;
-      } else {
-        accumulator.push({ count, side });
-      }
-      return accumulator;
-    }, [])
-    // turn to string array
-    .map(
-      ({ side, count }) =>
-        `${count < 0 ? '-' : ''}${Math.abs(count) === 1 && side !== 1 ? '' : Math.abs(count)}${side !== 1 ? 'd' + side : ''}`
-    )
-    .join('+')
-    .replace('+-', '-');
+// order is crucial
+const isNormalized = notation => !NOT_NORMALIZED_REGEXP.test(notation) && isDiceGroupedAndSorted(notation);
 
-export { Dice, Result, Detailed, Stats, toDice, getDice, rollDie, getDiceSet, roll, min, max, stats, normalize };
+function isDiceGroupedAndSorted(notation) {
+  const dice = toDice(notation).map(die => die.side);
+  const isUnique = dice.reduce(unique, []).length === dice.length;
+  const isSorted = dice.every(sorted);
+  return isUnique && isSorted;
+}
+
+const sorted = (e, i, a) => i === 0 || a[i - 1] > e;
+
+const unique = (a, c) => [...a, ...(a.includes(c) ? [] : [c])];
+
+const normalize = notation =>
+  isNormalized(notation)
+    ? notation
+    : toDice(notation.replace(/\s/g, '').toLowerCase())
+        .reduce((accumulator, { count, side }) => {
+          if (side !== 1 && count < 0) {
+            // turn positive
+            accumulator.push({ count: Math.abs(count), side });
+            // adjust negative modifier
+            accumulator.push({ count: count * (side + 1), side: 1 });
+          } else {
+            // push as is
+            accumulator.push({ count, side });
+          }
+          return accumulator;
+        }, [])
+        .sort((a, b) => b.side - a.side)
+        .reduce((accumulator, { count, side }) => {
+          // group same sided dice
+          if (accumulator.length && side === accumulator[accumulator.length - 1].side) {
+            accumulator[accumulator.length - 1].count += count;
+          } else {
+            accumulator.push({ count, side });
+          }
+          return accumulator;
+        }, [])
+        // turn to string array
+        .map(
+          ({ side, count }) =>
+            `${count < 0 ? '-' : ''}${Math.abs(count) === 1 && side !== 1 ? '' : Math.abs(count)}${
+              side !== 1 ? 'd' + side : ''
+            }`
+        )
+        .join('+')
+        .replace('+-', '-');
+
+export {
+  Dice,
+  Result,
+  Detailed,
+  Stats,
+  toDice,
+  getDice,
+  rollDie,
+  getDiceSet,
+  roll,
+  min,
+  max,
+  stats,
+  normalize,
+  isNormalized,
+};

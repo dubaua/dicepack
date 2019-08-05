@@ -21,8 +21,8 @@ describe('normalize', function() {
       assert.strictEqual(normalize('d6+d4+2d6'), '3d6+d4');
     });
 
-    it('order dice by side d12+d8+d10+d4+d6+d20 => d20+d12+d10+d8+d6+d4', function() {
-      assert.strictEqual(normalize('d12+d8+d10+d4+d6+d20'), 'd20+d12+d10+d8+d6+d4');
+    it('order dice by side d12+d8+d10+d4+1+d6+d20 => d20+d12+d10+d8+d6+d4+1', function() {
+      assert.strictEqual(normalize('d12+d8+d10+d4+1+d6+d20'), 'd20+d12+d10+d8+d6+d4+1');
     });
 
     it('remove 1 before 1dN 1d6 => d6', function() {

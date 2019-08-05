@@ -34,7 +34,11 @@
 
 Have spaces
 Have uppercase
-Have duplicating dN groups
 Have 1dN
 Have Nd1
 Have negative before d
+Have duplicating dN groups
+Have unsorted dice groups
+
+split code
+add microbundle
