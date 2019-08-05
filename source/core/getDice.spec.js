@@ -1,5 +1,6 @@
 import assert from 'assert';
-import { getDice, Dice } from '../index.js';
+import Dice from '../types/Dice.js';
+import getDice from './getDice.js';
 
 describe('getDice', function() {
   describe('test edge cases', function() {

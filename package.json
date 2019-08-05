@@ -2,7 +2,7 @@
   "name": "roll-expression",
   "version": "1.0.0",
   "description": "Simple, blazing fast, no dependencies dice notation roller library",
-  "main": "index.js",
+  "main": "source/index.js",
   "keywords": [
     "roll",
     "dice",
@@ -10,7 +10,9 @@
     "d&d",
     "rpg"
   ],
-  "author": "dubaua <dubaua@gmail.com>",
+  "repository": "git@github.com:dubaua/roll-expression.git",
+  "author": "Vladimir Lysov",
+  "email": "dubaua@gmail.com",
   "license": "MIT",
   "devDependencies": {
     "@babel/core": "^7.0.0-0",
@@ -18,10 +20,11 @@
     "@babel/register": "^7.0.0",
     "mocha": "^6.0.2",
     "parcel-bundler": "^1.11.0",
+    "rimraf": "^2.6.3",
     "sass": "^1.22.7"
   },
   "scripts": {
-    "test": "mocha --require @babel/register ./test/**/*.spec.js",
+    "test": "mocha --require @babel/register ./**/*.spec.js",
     "build": "parcel build index.js"
   }
 }

@@ -1,5 +1,5 @@
 import assert from 'assert';
-import { normalize } from '../index.js';
+import normalize from './normalize.js';
 
 describe('normalize', function() {
   describe('returns a string', function() {

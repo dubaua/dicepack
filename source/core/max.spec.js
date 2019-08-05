@@ -1,5 +1,5 @@
 import assert from 'assert';
-import { max, Detailed } from '../index.js';
+import max from './max.js';
 
 describe('max', function() {
   describe('returns a number', function() {

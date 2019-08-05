@@ -1,5 +1,5 @@
 import assert from 'assert';
-import { min, Detailed } from '../index.js';
+import min from './min.js';
 
 describe('min', function() {
   describe('returns a number', function() {

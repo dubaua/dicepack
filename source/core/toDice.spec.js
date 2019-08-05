@@ -1,5 +1,6 @@
 import assert from 'assert';
-import { toDice, Dice } from '../index.js';
+import Dice from '../types/Dice.js';
+import toDice from './toDice.js';
 
 describe('toDice', function() {
   const result = toDice('2d6+5');

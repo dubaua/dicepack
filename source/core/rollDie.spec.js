@@ -1,5 +1,5 @@
 import assert from 'assert';
-import { rollDie } from '../index.js';
+import rollDie from './rollDie.js';
 
 describe('rollDie', function() {
   describe('test if side = 1, count = 6', function() {

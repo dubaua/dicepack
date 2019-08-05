@@ -1,5 +1,6 @@
 import assert from 'assert';
-import { stats, Stats } from '../index.js';
+import Stats from '../types/Stats.js';
+import stats from './stats.js';
 
 const approximatelyEquals = (value1, value2, epsilon = 0.01) => Math.abs(value1 - value2) < epsilon;
 

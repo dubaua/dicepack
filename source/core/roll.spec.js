@@ -1,5 +1,7 @@
 import assert from 'assert';
-import { roll, Result, Detailed } from '../index.js';
+import Result from '../types/Result.js';
+import Detailed from '../types/Detailed.js';
+import roll from './roll.js';
 
 describe('roll', function() {
   describe('returns a number', function() {
