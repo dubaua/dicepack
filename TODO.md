@@ -42,3 +42,14 @@ Have unsorted dice groups
 
 split code
 add microbundle
+
+make stats method async
+add backend stats calculations
+
+add usage to README
+place and name getDiceSet first, then separate methods
+
+# Playground
+
+Print average, variance, standardDeviation
+

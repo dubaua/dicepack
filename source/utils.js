@@ -34,3 +34,7 @@ export const unique = (accumulator, current) => [
   ...accumulator,
   ...(accumulator.indexOf(current) !== -1 ? [] : [current]),
 ];
+
+export const getDiceComplexity = (accumulator, current) => accumulator * Math.pow(current.side, current.count);
+
+export const getAverage = (min, max) => (min + max) / 2;

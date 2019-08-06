@@ -1,5 +1,5 @@
 import Stats from '../types/Stats.js';
-import { sum, directProduct } from '../utils.js';
+import { sum, directProduct, getAverage } from '../utils.js';
 
 export default function statsDice(dice) {
   const independent = dice.reduce(function(accumulator, { count, side }) {
@@ -39,7 +39,7 @@ export default function statsDice(dice) {
 
   const distribution = Object.values(compact).sort((a, b) => a.result - b.result);
 
-  const average = combined.reduce(sum, 0) / count;
+  const average = getAverage(combined[0], combined[combined.length - 1]);
 
   const variance = combined.map(result => Math.pow(result - average, 2)).reduce(sum, 0) / count;
 

@@ -4,6 +4,7 @@ import maxDice from './maxDice.js';
 import rollDice from './rollDice.js';
 import statsDice from './statsDice.js';
 import normalize from './normalize.js';
+import { getDiceComplexity, getAverage } from '../utils.js';
 
 class DiceSet {
   constructor(notation) {
@@ -11,7 +12,8 @@ class DiceSet {
     this.dice = toDice(this.notation);
     this.min = minDice(this.dice);
     this.max = maxDice(this.dice);
-    this.mean = (this.max - this.min) / 2 + this.min;
+    this.mean = getAverage(this.min, this.max);
+    this.complexity = this.dice.reduce(getDiceComplexity, 1);
     this.roll = detailed => rollDice(this.dice, detailed);
     this.stats = detailed => statsDice(this.dice, detailed);
     this.normalize = () => {
