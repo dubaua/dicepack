@@ -1,5 +1,5 @@
 import getDice from './getDice.js';
-import { validate } from '../utils.js';
+import validate from '../utils/validate.js';
 
 const NOTATION_REGEXP = /^((-?)(\d+|\d*d\d+))([+-](\d+|\d*d\d+))*$/;
 

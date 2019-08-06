@@ -1,5 +1,7 @@
 import Stats from '../types/Stats.js';
-import { sum, directProduct, getAverage } from '../utils.js';
+import sum from '../utils/sum.js';
+import directProduct from '../utils/directProduct.js';
+import getAverage from '../utils/getAverage.js';
 
 export default function statsDice(dice) {
   const independent = dice.reduce(function(accumulator, { count, side }) {

@@ -4,7 +4,8 @@ import maxDice from './maxDice.js';
 import rollDice from './rollDice.js';
 import statsDice from './statsDice.js';
 import normalize from './normalize.js';
-import { getDiceComplexity, getAverage } from '../utils.js';
+import getDiceComplexity from '../utils/getDiceComplexity.js';
+import getAverage from '../utils/getAverage.js';
 
 class DiceSet {
   constructor(notation) {

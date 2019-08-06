@@ -1,5 +1,6 @@
 import toDice from './toDice.js';
-import { unique, sorted } from '../utils.js';
+import unique from '../utils/unique.js';
+import sorted from '../utils/sorted.js';
 
 /*
  * [A-Z]+       captures uppercase

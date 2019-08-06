@@ -1,5 +1,6 @@
 import Dice from '../types/Dice.js';
-import { validate, castToNumber } from '../utils.js';
+import validate from '../utils/validate.js';
+import castToNumber from '../utils/castToNumber.js';
 
 const DICE_REGEXP = /^-?(\d+|\d*d\d+)$/;
 const STARTING_D_WIHTOUT_COUNT = /^(-?)d/;

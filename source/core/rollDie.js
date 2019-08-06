@@ -1,4 +1,4 @@
-import { getRandomInt } from '../utils.js';
+import getRandomInt from '../utils/getRandomInt.js';
 
 const rollDie = function({ count, side }) {
   let results = [];

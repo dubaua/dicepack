@@ -1,4 +1,4 @@
-import { addProperty } from '../utils.js';
+import addProperty from '../utils/addProperty.js';
 import Result from './Result';
 
 export default class Detailed {

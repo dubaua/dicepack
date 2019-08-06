@@ -1,4 +1,4 @@
-import { addProperty } from '../utils.js';
+import addProperty from '../utils/addProperty.js';
 
 export default class Dice {
   constructor({ count, side }) {
