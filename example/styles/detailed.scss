@@ -30,7 +30,7 @@
     left: 0;
     right: 0;
     color: white;
-    text-shadow: 0 1px 1px rgba(0,0,0,.38);
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.38);
   }
 
   &__number,
@@ -38,5 +38,8 @@
     font-size: 24px;
     line-height: $size;
     text-align: center;
+    &--negative {
+      text-indent: -0.5ch;
+    }
   }
 }

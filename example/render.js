@@ -18,7 +18,7 @@ function create(tagAndClass, { style, listeners, attributes, ref, domProps, data
     for (const key in attributes) {
       var attr = attributes[key];
       if (attr) {
-        if (['xlink:href'].includes(key)) {
+        if (['xlink:href'].indexOf(key) !== -1) {
           nodeElement.setAttributeNS('http://www.w3.org/1999/xlink', key, attr);
         } else {
           nodeElement.setAttribute(key, attr);
