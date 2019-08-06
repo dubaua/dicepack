@@ -1,6 +1,7 @@
-import { getDiceSet } from '../index.js';
+import getDiceSet from '../source/core/getDiceSet.js';
 import { create, bindReference } from './render.js';
-import * as utils from './utils.js';
+import round from '../source/utils/round.js';
+import randomizeDiceNotation from '../source/utils/randomizeDiceNotation.js';
 
 const SPECIAL_DICE = [2, 4, 6, 8, 10, 12, 20];
 
@@ -8,7 +9,7 @@ const state = {
   refs: {
     columnNodeArray: [],
   },
-  exampleNotation: utils.getRandomNotation(),
+  exampleNotation: getRandomNotation(),
   diceSet: null,
   stats: null,
 };
@@ -123,11 +124,19 @@ let playground = create('div.page', {}, [
 
 document.body.appendChild(playground);
 
+function getRandomNotation() {
+  return randomizeDiceNotation({
+    maxCount: 10,
+    sides: [1, 4, 6, 8, 10, 12, 20, 100],
+    maxLength: 3,
+  });
+}
+
 function takeExample() {
   // paste example notation to input
   state.refs.inputNode.value = state.exampleNotation;
   // generate and show new example
-  state.exampleNotation = utils.getRandomNotation();
+  state.exampleNotation = getRandomNotation();
   state.refs.exampleNode.textContent = state.exampleNotation;
 }
 
@@ -185,14 +194,14 @@ const renderDie = (rolled, side) =>
           'use',
           {
             attributes: {
-              'xlink:href': `#d${SPECIAL_DICE.includes(side) ? side : 'N'}`,
+              'xlink:href': `#d${SPECIAL_DICE.indexOf(side) !== -1 ? side : 'N'}`,
             },
           },
         ],
       ],
     ],
     [
-      'span.detailed__die-result',
+      `span.detailed__die-result${rolled < 0 ? '.detailed__die-result--negative' : ''}`,
       {
         domProps: {
           textContent: rolled,
@@ -202,7 +211,7 @@ const renderDie = (rolled, side) =>
     ],
   ]);
 
-const renderNumber = rolled => create('span.detailed__number', { domProps: { textContent: rolled } });
+const renderNumber = rolled => create(`span.detailed__number${rolled < 0 ? '.detailed__number--negative' : ''}`, { domProps: { textContent: rolled } });
 
 function renderStats(result, isChanged) {
   // if notation wasn't changed just highlight result column
@@ -233,7 +242,7 @@ function renderStats(result, isChanged) {
     let chance = (state.stats.distribution.filter(column => column.result === result)[0].chance * 100).toFixed(2) + '%';
     state.refs.chanceNode.textContent = chance;
 
-    const maxChance = utils.round(Math.max(...state.stats.distribution.map(column => column.chance)), 3);
+    const maxChance = round(Math.max(...state.stats.distribution.map(column => column.chance)), 3);
     const multiplier = Math.floor(1 / maxChance);
     const multipliers = [100, 50, 25, 20, 10, 5, 4, 2, 1];
     const closestMultiplier = multipliers.filter(m => m <= multiplier)[0];
