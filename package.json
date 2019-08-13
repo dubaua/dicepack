@@ -28,14 +28,15 @@
     "sass": "^1.22.7"
   },
   "scripts": {
-    "test": "mocha --require @babel/register ./**/*.spec.js",
-    "build": "rimraf dist && microbundle --name RollExpression --strict"
+    "test": "mocha --require @babel/register source/**/*.spec.js",
+    "build": "rimraf dist && microbundle --name RollExpression --strict",
+    "dev": "parcel example/index.html --open"
   },
   "minify": {
     "mangle": {
       "reserved": [
         "Stats",
-        "Details",
+        "Detailed",
         "Result",
         "Dice",
         "DiceSet"

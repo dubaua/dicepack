@@ -1,4 +1,4 @@
-import collect from './collect.js';
+import collect from '../utils/collect.js';
 
 const maximize = ({ count, side }) => Math.max(count, count * side);
 

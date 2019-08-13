@@ -49,6 +49,11 @@ add backend stats calculations
 add usage to README
 place and name getDiceSet first, then separate methods
 
+Split normalize to normalizeDice and toNotation
+statsDice should normalize for performance
+rewrite directProduct from reducer to function for performance
+extract library methods folder up
+
 # Playground
 
 Print average, variance, standardDeviation

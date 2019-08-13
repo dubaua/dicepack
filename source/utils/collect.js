@@ -1,7 +1,7 @@
 import Result from '../types/Result.js';
 import Detailed from '../types/Detailed.js';
-import sum from '../utils/sum.js';
-import flatten from '../utils/flatten.js';
+import sum from './sum.js';
+import flatten from './flatten.js';
 
 const collect = function(rolls, detailed, dice) {
   const result = rolls.reduce(flatten, []).reduce(sum, 0);

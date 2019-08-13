@@ -1,4 +1,4 @@
-import collect from './collect.js';
+import collect from '../utils/collect.js';
 
 const minimize = ({ count, side }) => Math.min(count, count * side);
 

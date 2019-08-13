@@ -1,5 +1,5 @@
 import assert from 'assert';
-import isNormalized from './isNormalized.js';
+import isNormalized from '../isNormalized.js';
 
 describe('isNormalized', function() {
   describe('returns a boolean', function() {

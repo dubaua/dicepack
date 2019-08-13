@@ -18,7 +18,7 @@ function isDiceGroupedAndSorted(notation) {
   return isUnique && isSorted;
 }
 
+// order is crucial
 const isNormalized = notation => !NOT_NORMALIZED_REGEXP.test(notation) && isDiceGroupedAndSorted(notation);
 
-// order is crucial
 export default isNormalized;

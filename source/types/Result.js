@@ -13,16 +13,16 @@ export default class Result {
     addProperty({
       value: side,
       key: 'side',
-      validator: x => typeof x === 'number' && x > 0 && Math.round(x) === x,
-      description: 'a natural number',
+      validator: x => typeof x === 'number' && x >= 0 && Math.round(x) === x,
+      description: 'non-negative integer',
       context: this,
     });
 
     addProperty({
       value: rolled,
       key: 'rolled',
-      validator: x => typeof x === 'number' && x !== 0 && Math.round(x) === x,
-      description: 'a natural number',
+      validator: x => typeof x === 'number' && Math.round(x) === x,
+      description: 'an integer',
       context: this,
     });
   }

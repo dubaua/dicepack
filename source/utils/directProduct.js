@@ -1,6 +1,4 @@
-import sum from './sum.js';
-import flatten from './flatten.js';
-
-const directProduct = (accumulator, current) => current.map(x => accumulator.map(y => sum(x, y))).reduce(flatten, []);
+const productTwo = (a, b) => [].concat(...a.map(d => b.map(e => d+e)));
+const directProduct = (a, b, ...c) => (b ? directProduct(productTwo(a, b), ...c) : a);
 
 export default directProduct;

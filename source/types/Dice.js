@@ -5,16 +5,16 @@ export default class Dice {
     addProperty({
       value: count,
       key: 'count',
-      validator: x => typeof x === 'number' && x !== 0 && Math.round(x) === x,
-      description: 'a non zero integer',
+      validator: x => typeof x === 'number' && Math.round(x) === x,
+      description: 'an integer',
       context: this,
     });
 
     addProperty({
       value: side,
       key: 'side',
-      validator: x => typeof x === 'number' && x > 0 && Math.round(x) === x,
-      description: 'a natural number',
+      validator: x => typeof x === 'number' && x >= 0 && Math.round(x) === x,
+      description: 'non-negative integer',
       context: this,
     });
   }

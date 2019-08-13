@@ -1,6 +1,6 @@
 import assert from 'assert';
-import Dice from '../types/Dice.js';
-import getDice from './getDice.js';
+import Dice from '../../types/Dice.js';
+import getDice from '../getDice.js';
 
 describe('getDice', function() {
   describe('test edge cases', function() {
@@ -125,12 +125,6 @@ describe('getDice', function() {
       '11.d1',
       '1d1.1',
       '1d11.',
-      '-d0',
-      '0',
-      '-0',
-      '0d0',
-      '-0d0',
-      'd0-4',
       true,
       false,
       1,

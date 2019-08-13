@@ -1,3 +1,3 @@
-const getDiceComplexity = (accumulator, current) => accumulator * Math.pow(current.side, current.count);
+const getDiceComplexity = dice => dice.reduce((accumulator, { count, side }) => accumulator * Math.pow(side, count), 1);
 
 export default getDiceComplexity;

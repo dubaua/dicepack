@@ -2,9 +2,9 @@ import getRandomInt from '../utils/getRandomInt.js';
 
 const rollDie = function({ count, side }) {
   let results = [];
-  if (side === 1) {
-    // no need to roll d1
-    results.push(count);
+  // no need to roll d1
+  if (side === 1 || side === 0 || count === 1 || count === 0) {
+    results.push(count * side);
   } else {
     const rollCount = Math.abs(count);
     const sign = Math.sign(count);
