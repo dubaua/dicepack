@@ -1,4 +1,5 @@
 import addProperty from '../utils/addProperty.js';
+import isInteger from '../utils/isInteger.js';
 
 export default class Result {
   constructor({ type, side, rolled }) {
@@ -13,7 +14,7 @@ export default class Result {
     addProperty({
       value: side,
       key: 'side',
-      validator: x => typeof x === 'number' && x >= 0 && Math.round(x) === x,
+      validator: x => isInteger(x) && x >= 0,
       description: 'non-negative integer',
       context: this,
     });
@@ -21,7 +22,7 @@ export default class Result {
     addProperty({
       value: rolled,
       key: 'rolled',
-      validator: x => typeof x === 'number' && Math.round(x) === x,
+      validator: x => isInteger(x),
       description: 'an integer',
       context: this,
     });

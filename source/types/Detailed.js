@@ -1,4 +1,5 @@
 import addProperty from '../utils/addProperty.js';
+import isInteger from '../utils/isInteger.js';
 import Result from './Result';
 
 export default class Detailed {
@@ -6,7 +7,7 @@ export default class Detailed {
     addProperty({
       value: result,
       key: 'result',
-      validator: x => typeof x === 'number' && Math.round(x) === x,
+      validator: x => isInteger(x),
       description: 'an integer',
       context: this,
     });

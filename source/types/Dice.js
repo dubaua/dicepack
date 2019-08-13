@@ -1,11 +1,12 @@
 import addProperty from '../utils/addProperty.js';
+import isInteger from '../utils/isInteger.js';
 
 export default class Dice {
   constructor({ count, side }) {
     addProperty({
       value: count,
       key: 'count',
-      validator: x => typeof x === 'number' && Math.round(x) === x,
+      validator: x => isInteger(x),
       description: 'an integer',
       context: this,
     });
@@ -13,7 +14,7 @@ export default class Dice {
     addProperty({
       value: side,
       key: 'side',
-      validator: x => typeof x === 'number' && x >= 0 && Math.round(x) === x,
+      validator: x => isInteger(x) && x >= 0,
       description: 'non-negative integer',
       context: this,
     });
