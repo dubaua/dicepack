@@ -27,6 +27,11 @@
     background-image: linear-gradient(0deg, blue, red);
     background-size: 100% $column-height;
     background-position: center bottom;
+    transform: scale(1, 0);
+    transform-origin: center bottom;
+    transition-property: transform;
+    transition-duration: 0.2s;
+    transition-timing-function: cubic-bezier(0, 0.62, 0.38, 1);
   }
 
   &__legend {

@@ -1,4 +1,4 @@
-import getDiceSet from '../source/core/getDiceSet.js';
+import pack from '../source/pack.js';
 import { create, bindReference } from './render.js';
 import round from '../source/utils/round.js';
 import randomizeDiceNotation from '../source/utils/randomizeDiceNotation.js';
@@ -11,7 +11,7 @@ const state = {
   },
   exampleNotation: getRandomNotation(),
   diceSet: null,
-  stats: null,
+  distribution: null,
 };
 
 let playground = create('div.page', {}, [
@@ -147,12 +147,20 @@ function handleRoll() {
   const isChanged = nextNotation !== state.notation;
   if (isChanged) {
     try {
-      state.diceSet = getDiceSet(nextNotation);
+      state.diceSet = pack(nextNotation);
       state.notation = nextNotation;
+      console.log(state.diceSet);
 
       const complexity = state.diceSet.dice.reduce((acc, { side, count }) => acc * Math.pow(side, Math.abs(count)), 1);
-      state.stats = complexity <= 50000 ? state.diceSet.stats() : null;
+
+      /* TEST */
+      // const { min, max, mean } = state.diceSet;
+      // statsNew({ dice: nextNotation, min, max, mean, complexity });
+      /* TEST END */
+
+      state.distribution = complexity <= 100000 ? state.diceSet.distribute() : null;
     } catch (err) {
+      console.log(err);
       alert(err.message);
       // TODO handle error message
       return false;
@@ -176,7 +184,7 @@ function renderResults(result, rolls) {
       create(
         'span.detailed__group',
         {},
-        group.map(({ type, rolled, side }) => (type === 'die' ? renderDie(rolled, side) : renderNumber(rolled)))
+        group.map(({ type, roll, side }) => (type === 'die' ? renderDie(roll, side) : renderNumber(roll)))
       )
     )
   );
@@ -184,7 +192,7 @@ function renderResults(result, rolls) {
   state.refs.rollsNode.appendChild(detailed);
 }
 
-const renderDie = (rolled, side) =>
+const renderDie = (roll, side) =>
   create('span.detailed__die', {}, [
     [
       'svg.detailed__die-icon',
@@ -201,21 +209,22 @@ const renderDie = (rolled, side) =>
       ],
     ],
     [
-      `span.detailed__die-result${rolled < 0 ? '.detailed__die-result--negative' : ''}`,
+      `span.detailed__die-result${roll < 0 ? '.detailed__die-result--negative' : ''}`,
       {
         domProps: {
-          textContent: rolled,
+          textContent: roll,
           title: `d${side}`,
         },
       },
     ],
   ]);
 
-const renderNumber = rolled => create(`span.detailed__number${rolled < 0 ? '.detailed__number--negative' : ''}`, { domProps: { textContent: rolled } });
+const renderNumber = roll =>
+  create(`span.detailed__number${roll < 0 ? '.detailed__number--negative' : ''}`, { domProps: { textContent: roll } });
 
 function renderStats(result, isChanged) {
   // if notation wasn't changed just highlight result column
-  if (!isChanged && state.stats) {
+  if (!isChanged && state.distribution) {
     // update active column
     state.refs.columnNodeArray.forEach(columnNode => {
       if (columnNode.result === result) {
@@ -226,7 +235,7 @@ function renderStats(result, isChanged) {
     });
 
     // update chance
-    let chance = (state.stats.distribution.filter(column => column.result === result)[0].chance * 100).toFixed(2) + '%';
+    let chance = (state.distribution.filter(column => column.result === result)[0].chance * 100).toFixed(2) + '%';
     state.refs.chanceNode.textContent = chance;
 
     return false;
@@ -238,16 +247,17 @@ function renderStats(result, isChanged) {
   state.refs.chanceNode.textContent = null;
   state.refs.columnNodeArray = [];
 
-  if (state.stats) {
-    let chance = (state.stats.distribution.filter(column => column.result === result)[0].chance * 100).toFixed(2) + '%';
+  if (state.distribution) {
+    let chance = (state.distribution.filter(column => column.result === result)[0].chance * 100).toFixed(2) + '%';
     state.refs.chanceNode.textContent = chance;
 
-    const maxChance = round(Math.max(...state.stats.distribution.map(column => column.chance)), 3);
+    const maxChance = round(Math.max(...state.distribution.map(column => column.chance)), 3);
     const multiplier = Math.floor(1 / maxChance);
     const multipliers = [100, 50, 25, 20, 10, 5, 4, 2, 1];
     const closestMultiplier = multipliers.filter(m => m <= multiplier)[0];
 
-    state.stats.distribution.forEach(column => {
+    state.distribution.forEach(column => {
+      let columnRefs = {};
       const columnNode = create(
         `div.distribution__column${column.result === result ? '.distribution__column--active' : ''}`,
         {},
@@ -258,6 +268,7 @@ function renderStats(result, isChanged) {
               style: {
                 height: `${column.chance * closestMultiplier * 100}%`,
               },
+              ref: bindReference(columnRefs, 'bar'),
             },
             [
               [
@@ -289,7 +300,19 @@ function renderStats(result, isChanged) {
       );
       state.refs.distributionNode.appendChild(columnNode);
       columnNode.result = column.result;
+      columnNode.chance = column.chance;
+      columnNode.bar = columnRefs.bar;
       state.refs.columnNodeArray.push(columnNode);
+    });
+
+    let counter = 0;
+    let drawColumnsTimerId = requestAnimationFrame(function drawBar() {
+      const column = state.refs.columnNodeArray[counter];
+      column.bar.style.transform = 'scale(1,1)';
+      counter++;
+      if (counter < state.refs.columnNodeArray.length) {
+        drawColumnsTimerId = requestAnimationFrame(drawBar);
+      }
     });
 
     // update distribution classnames
@@ -370,10 +393,10 @@ function handleResize() {
 }
 
 function updateDistributionClassname() {
-  if (state.stats) {
+  if (state.distribution) {
     const MIN_COLUMN_WIDTH = 34;
 
-    const columnCount = state.stats.distribution.length;
+    const columnCount = state.distribution.length;
     const distributionWidth = state.refs.distributionNode.offsetWidth;
 
     if (columnCount * MIN_COLUMN_WIDTH > distributionWidth) {
