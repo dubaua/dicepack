@@ -1,10 +1,24 @@
 import assert from 'assert';
 import Dice from '../../types/Dice.js';
+import Point from '../../types/Point.js';
 import distributeDice from '../distributeDice.js';
 
 const approximatelyEquals = (value1, value2, epsilon = 0.01) => Math.abs(value1 - value2) < epsilon;
 
 describe('distributeDice', function() {
+  describe('testing types', function() {
+    const distribution = distributeDice([new Dice({ count: 1, side: 6 })]);
+    it('distribution is Array', function() {
+      const isArray = Array.isArray(distribution);
+      assert.strictEqual(isArray, true);
+    });
+
+    it('each point instance of Point', function() {
+      const eachIsPoint = distribution.every(point => point instanceof Point);
+      assert.strictEqual(eachIsPoint, true);
+    });
+  });
+
   describe('testing d6', function() {
     const distribution = distributeDice([new Dice({ count: 1, side: 6 })]);
     const first = distribution[0];
@@ -72,7 +86,6 @@ describe('distributeDice', function() {
       assert.strictEqual(distribution.length, 26);
     });
 
-
     it('distribution first result = 8', function() {
       assert.strictEqual(first.result, 8);
     });
@@ -90,7 +103,58 @@ describe('distributeDice', function() {
     });
 
     it('chance of 17 ~= 1/16', function() {
-      assert.strictEqual(approximatelyEquals(distribution[9].chance, 1 / (12 * 10 * 6) * 45), true);
+      assert.strictEqual(approximatelyEquals(distribution[9].chance, (1 / (12 * 10 * 6)) * 45), true);
+    });
+  });
+
+  describe('testing 2d0', function() {
+    const distribution = distributeDice([new Dice({ count: 2, side: 0 })]);
+
+    const first = distribution[0];
+    it('distribution length = 1', function() {
+      assert.strictEqual(distribution.length, 1);
+    });
+
+    it('distribution result = 0', function() {
+      assert.strictEqual(first.result, 0);
+    });
+
+    it('distribution chance = 1', function() {
+      assert.strictEqual(first.chance === 1, true);
+    });
+  });
+
+  describe('testing 5d1', function() {
+    const distribution = distributeDice([new Dice({ count: 5, side: 1 })]);
+
+    const first = distribution[0];
+    it('distribution length = 1', function() {
+      assert.strictEqual(distribution.length, 1);
+    });
+
+    it('distribution result = 5', function() {
+      assert.strictEqual(first.result, 5);
+    });
+
+    it('distribution chance = 1', function() {
+      assert.strictEqual(first.chance === 1, true);
+    });
+  });
+
+  describe('testing empty array', function() {
+    const distribution = distributeDice([]);
+
+    const first = distribution[0];
+    it('distribution length = 1', function() {
+      assert.strictEqual(distribution.length, 1);
+    });
+
+    it('distribution result = 0', function() {
+      assert.strictEqual(first.result, 0);
+    });
+
+    it('distribution chance = 1', function() {
+      assert.strictEqual(first.chance === 1, true);
     });
   });
 });
