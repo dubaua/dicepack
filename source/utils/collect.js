@@ -3,22 +3,13 @@ import Detailed from '../types/Detailed.js';
 import sum from './sum.js';
 import flatten from './flatten.js';
 
-const collect = function(rolls, detailed, dice) {
-  const result = rolls.reduce(flatten, []).reduce(sum, 0);
+const collect = function(results, detailed, dice) {
+  const result = results.reduce(flatten, []).reduce(sum, 0);
 
   // collecting rolls against dice config
   if (detailed) {
-    const _rolls = dice.map((die, index) =>
-      rolls[index].map(
-        roll =>
-          new Result({
-            type: die.side === 1 ? 'number' : 'die',
-            side: die.side,
-            rolled: roll,
-          })
-      )
-    );
-    return new Detailed({ result, rolls: _rolls });
+    const rolls = dice.map(({ side }, index) => results[index].map(roll => new Result({ side, roll })));
+    return new Detailed({ result, rolls });
   }
   return result;
 };
