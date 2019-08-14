@@ -18,7 +18,5 @@ export default class Result {
       description: 'an integer',
       context: this,
     });
-
-    this.type = side === 0 || side === 1 ? 'number' : 'die';
   }
 }
