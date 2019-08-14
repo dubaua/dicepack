@@ -21,9 +21,18 @@ class DicePack {
     this.isNormalized = isNormalized(this.notation);
 
     this.roll = detailed => rollDice(this.dice, detailed);
-    // todo save distribution
-    this.distribute = () => distributeDice(this.dice);
-    // todo log
+
+    // calculate distribution once, then access saved
+    let distribution = null;
+    Object.defineProperty(this, 'distribution', {
+      get() {
+        if (!distribution) {
+          distribution = distributeDice(this.dice);
+        }
+        return distribution;
+      },
+    });
+
     this.normalize = () => {
       this.dice = normalizeDice(this.dice);
       this.isNormalized = true;
@@ -32,6 +41,8 @@ class DicePack {
   }
 }
 
-const pack = notation => new DicePack(notation);
+const roll = (notation, detailed) => rollDice(toDice(sanitize(notation)), detailed);
+const distribute = notation => distributeDice(toDice(sanitize(notation)));
+const normalize = notation => normalizeDice(toDice(sanitize(notation)));
 
-export default pack;
+export { DicePack, roll, distribute, normalize };
