@@ -35,11 +35,11 @@
   "minify": {
     "mangle": {
       "reserved": [
-        "Stats",
         "Detailed",
-        "Result",
         "Dice",
-        "DiceSet"
+        "DicePack",
+        "Point",
+        "Result"
       ]
     }
   }
