@@ -3,7 +3,7 @@ import getRandomInt from '../utils/getRandomInt.js';
 const rollDie = function({ count, side }) {
   let results = [];
   // no need to roll d1
-  if (side === 1 || side === 0 || count === 1 || count === 0) {
+  if (side === 1 || side === 0 || count === 0) {
     results.push(count * side);
   } else {
     const rollCount = Math.abs(count);

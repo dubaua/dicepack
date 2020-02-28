@@ -18,18 +18,17 @@
   "email": "dubaua@gmail.com",
   "license": "MIT",
   "devDependencies": {
-    "@babel/core": "^7.0.0-0",
-    "@babel/preset-env": "^7.5.5",
-    "@babel/register": "^7.0.0",
+    "@babel/core": "^7.8.6",
+    "@babel/preset-env": "^7.8.6",
+    "@babel/register": "^7.8.6",
     "microbundle": "^0.11.0",
-    "mocha": "^6.0.2",
-    "parcel-bundler": "^1.11.0",
-    "rimraf": "^2.6.3",
-    "sass": "^1.22.7"
+    "mocha": "^7.1.0",
+    "parcel-bundler": "^1.12.4",
+    "sass": "^1.26.1"
   },
   "scripts": {
     "test": "mocha --require @babel/register source/**/*.spec.js",
-    "build": "rimraf dist && microbundle --name RollExpression --strict",
+    "build": "microbundle --name RollExpression --strict",
     "dev": "parcel example/index.html --open --port 8080"
   },
   "minify": {

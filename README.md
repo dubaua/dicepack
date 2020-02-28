@@ -41,10 +41,10 @@ meleeAttackDamage.normalize(); // => 2d6+3
 
 ## Methods
 
-| method    | parameters | return              | description                                                                                                                                         |
-| --------- | ---------- | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
-| roll      | `Boolean`  | `Number | Detailed` | resulting number or detailed results if flag given                                                                                                  |
-| normalize |            | `String`            | [normalized](https://github.com/dubaua/roll-expression#normalize) notation. Also turns `isNormalized` property true and updates `notation` property |
+| method    | parameters | return               | description                                                                                                                                         |
+| --------- | ---------- | -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| roll      | `Boolean`  | `Number \| Detailed` | resulting number or detailed results if flag given                                                                                                  |
+| normalize |            | `String`             | [normalized](https://github.com/dubaua/roll-expression#normalize) notation. Also turns `isNormalized` property true and updates `notation` property |
 
 You can use following methods separately
 
