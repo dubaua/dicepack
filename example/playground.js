@@ -1,7 +1,9 @@
-import pack from '../source/pack.js';
-import { create, bindReference } from './render.js';
-import round from '../source/utils/round.js';
-import randomizeDiceNotation from '../source/utils/randomizeDiceNotation.js';
+import { DicePack } from '@/pack.js';
+import { bindReference, create } from './render.js';
+import round from '@/utils/round.js';
+import randomizeDiceNotation from '@/utils/randomizeDiceNotation.js';
+
+window.DicePack = DicePack;
 
 const SPECIAL_DICE = [2, 4, 6, 8, 10, 12, 20];
 
@@ -14,7 +16,7 @@ const state = {
   distribution: null,
 };
 
-let playground = create('div.page', {}, [
+const playground = create('div.page', {}, [
   [
     'form.control',
     {
@@ -141,24 +143,18 @@ function takeExample() {
 }
 
 function handleRoll() {
-  if (!state.refs.inputNode.value) takeExample();
+  if (!state.refs.inputNode.value) {
+    takeExample();
+  }
 
   const nextNotation = state.refs.inputNode.value;
   const isChanged = nextNotation !== state.notation;
   if (isChanged) {
     try {
-      state.diceSet = pack(nextNotation);
+      state.diceSet = new DicePack(nextNotation);
       state.notation = nextNotation;
       console.log(state.diceSet);
-
-      const complexity = state.diceSet.dice.reduce((acc, { side, count }) => acc * Math.pow(side, Math.abs(count)), 1);
-
-      /* TEST */
-      // const { min, max, mean } = state.diceSet;
-      // statsNew({ dice: nextNotation, min, max, mean, complexity });
-      /* TEST END */
-
-      state.distribution = complexity <= 100000 ? state.diceSet.distribute() : null;
+      state.distribution = state.diceSet.distribution;
     } catch (err) {
       console.log(err);
       alert(err.message);
@@ -184,9 +180,9 @@ function renderResults(result, rolls) {
       create(
         'span.detailed__group',
         {},
-        group.map(({ type, roll, side }) => (type === 'die' ? renderDie(roll, side) : renderNumber(roll)))
-      )
-    )
+        group.map(({ roll, side }) => (side === 0 || side === 1 ? renderNumber(roll) : renderDie(roll, side))),
+      ),
+    ),
   );
   state.refs.rollsNode.innerHTML = null;
   state.refs.rollsNode.appendChild(detailed);
@@ -235,7 +231,7 @@ function renderStats(result, isChanged) {
     });
 
     // update chance
-    let chance = (state.distribution.filter(column => column.result === result)[0].chance * 100).toFixed(2) + '%';
+    const chance = (state.distribution.filter(column => column.result === result)[0].chance * 100).toFixed(2) + '%';
     state.refs.chanceNode.textContent = chance;
 
     return false;
@@ -248,7 +244,7 @@ function renderStats(result, isChanged) {
   state.refs.columnNodeArray = [];
 
   if (state.distribution) {
-    let chance = (state.distribution.filter(column => column.result === result)[0].chance * 100).toFixed(2) + '%';
+    const chance = (state.distribution.filter(column => column.result === result)[0].chance * 100).toFixed(2) + '%';
     state.refs.chanceNode.textContent = chance;
 
     const maxChance = round(Math.max(...state.distribution.map(column => column.chance)), 3);
@@ -257,7 +253,7 @@ function renderStats(result, isChanged) {
     const closestMultiplier = multipliers.filter(m => m <= multiplier)[0];
 
     state.distribution.forEach(column => {
-      let columnRefs = {};
+      const columnRefs = {};
       const columnNode = create(
         `div.distribution__column${column.result === result ? '.distribution__column--active' : ''}`,
         {},
@@ -296,7 +292,7 @@ function renderStats(result, isChanged) {
             ],
           ],
           renderColumnLegend(column),
-        ]
+        ],
       );
       state.refs.distributionNode.appendChild(columnNode);
       columnNode.result = column.result;
@@ -335,7 +331,7 @@ function renderStats(result, isChanged) {
           style: {
             bottom: `${(i / barCount) * 100}%`,
           },
-        })
+        }),
       );
     }
   } else {
@@ -347,7 +343,7 @@ function renderColumnLegend({ result }) {
   const { min, mean, max } = state.diceSet;
   const flooredMean = Math.floor(mean);
 
-  let label = (function() {
+  const label = (function() {
     switch (result) {
       case min:
         return { text: 'min', details: `=${min}`, classname: '' };

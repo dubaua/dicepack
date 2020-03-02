@@ -57,8 +57,8 @@ extract library methods folder up
 log
 roll crypto
 
+add JSDoc, add jsconfig
+
 # Playground
 
 Print average, variance, standardDeviation
-
-add JSDoc, add jsconfig

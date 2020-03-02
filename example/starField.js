@@ -1,5 +1,5 @@
-import { getDiceSet } from '../index.js';
-import { create, bindReference } from '../render.js';
+import { DicePack } from '../src/pack.js';
+import { bindReference, create } from './render.js';
 
 const field = document.getElementById('space');
 const ctx = field.getContext('2d');
@@ -94,14 +94,14 @@ function draw() {
   // resize canvas on window resize
   if (screenWidth != window.innerWidth) {
     screenWidth = window.innerWidth;
-    xRange = getDiceSet(`d${Math.round(screenWidth)}`);
+    xRange = new DicePack(`d${Math.round(screenWidth)}`);
     field.width = screenWidth;
   }
 
   if (screenHeight != window.innerHeight) {
     screenHeight = window.innerHeight;
     screenCenterY = Math.round(screenHeight / 2);
-    yRange = getDiceSet(`${gravity}d${Math.round(screenHeight / gravity + 1)}-${gravity}`);
+    yRange = new DicePack(`${gravity}d${Math.round(screenHeight / gravity + 1)}-${gravity}`);
     field.height = screenHeight;
   }
 
@@ -113,7 +113,7 @@ function draw() {
     starsArray = starsArray.splice(0, starCount);
   }
 
-  for (var i = starsArray.length; i < starCount; i++) {
+  for (let i = starsArray.length; i < starCount; i++) {
     new Star();
   }
 
@@ -126,7 +126,7 @@ function draw() {
 
 requestAnimationFrame(draw);
 
-var settingsElement = create(
+const settingsElement = create(
   'div.settings',
   {},
   Object.keys(settings).map(key =>
@@ -160,15 +160,15 @@ var settingsElement = create(
           },
           listeners: {
             input(e) {
-              var value = Number(e.target.value)
+              const value = Number(e.target.value);
               settings[key].value = value;
               settings[key].element.innerHTML = value.toFixed(settings[key].precision);
             },
           },
         },
       ],
-    ])
-  )
+    ]),
+  ),
 );
 
 document.body.appendChild(settingsElement);
