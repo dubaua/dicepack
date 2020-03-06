@@ -1,10 +1,17 @@
-import normalizeDice from './normalizeDice.js';
-import Point from '../types/Point.js';
-import directProduct from '../utils/directProduct.js';
+import '@/core/typedef.js';
+import normalizeDiceArray from '@/core/normalizeDiceArray.js';
+import directProduct from '@/utils/directProduct.js';
 
-export default function distributeDice(dice) {
+/**
+ * Converts Dice Array to Point Array describes each possible result and chance
+ *
+ * @param {Array<Dice>} diceArray
+ * @returns {Array<Point>} array of result chances
+ */
+
+function distributeDiceArray(diceArray) {
   let distribution = [];
-  const normalized = normalizeDice(dice);
+  const normalized = normalizeDiceArray(diceArray);
 
   // modifiy zeroes
   const onlyDice = [];
@@ -39,18 +46,20 @@ export default function distributeDice(dice) {
       .map(result => ({ result: result + modifier, chance }))
       .reduce((distribution, { result, chance }) => {
         const resultKey = String(result);
-        const nextPoint = new Point({
+        const nextPoint = {
           result,
           chance: chance + (distribution[resultKey] ? distribution[resultKey].chance : 0),
-        });
+        };
         distribution[resultKey] = nextPoint;
         return distribution;
       }, {});
 
     distribution = Object.values(compact).sort((a, b) => a.result - b.result);
   } else {
-    distribution = [new Point({ result: modifier, chance: 1 })];
+    distribution = [{ result: modifier, chance: 1 }];
   }
 
   return distribution;
 }
+
+export default distributeDiceArray;

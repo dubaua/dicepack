@@ -1,7 +1,15 @@
-import validateDiceArray from '../utils/validateDiceArray.js';
+import '@/core/typedef.js';
+import validateDiceArray from '@/utils/validateDiceArray.js';
 
-const toNotation = dice =>
-  validateDiceArray(dice).reduce(
+/**
+ * Converts dice array to notation
+ *
+ * @param {Array<Dice>} diceArray
+ * @returns {string} dice notation
+ */
+
+const toNotation = diceArray =>
+  validateDiceArray(diceArray).reduce(
     (accumulator, { count, side }, index) =>
       `${accumulator}${
         // don't plus at string start

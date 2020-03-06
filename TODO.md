@@ -23,23 +23,6 @@
 
 Было бы круто подвезти контролы, которые меняют скорость, интенсивность генерации и нелинейность рандома.
 
-# Normalize
-
-Убрать пробелы, привести в ловеркейс
-Негативные роллы перевести в позитивные - модификатор.
-Упорядочить по убыванию стороны кубика
-преобразовать в строку
-
-# Check normal
-
-Have spaces
-Have uppercase
-Have 1dN
-Have Nd1
-Have negative before d
-Have duplicating dN groups
-Have unsorted dice groups
-
 split code
 add microbundle
 
@@ -49,7 +32,7 @@ add backend stats calculations
 add usage to README
 place and name getDiceSet first, then separate methods
 
-Split normalize to normalizeDice and toNotation
+Split normalize to normalizeDiceArray and toNotation
 statsDice should normalize for performance
 rewrite directProduct from reducer to function for performance
 extract library methods folder up
@@ -62,3 +45,6 @@ add JSDoc, add jsconfig
 # Playground
 
 Print average, variance, standardDeviation
+
+Явно указать, что Dice - это один набор костей с одинаковой гранью: 2d6, d4, 1, статичное число, это тоже дайс, просто с модификатором для упрощения либы.
+DiceArray это набор наборов костей.

@@ -1,11 +1,11 @@
 import assert from 'assert';
-import Dice from '../../types/Dice.js';
-import getDice from '../getDice.js';
+import getDice from '@/core/getDice.js';
+import isDice from '@/utils/isDice.js';
 
 describe('getDice', () => {
   describe('test edge cases', () => {
     it('returns result type of Dice', () => {
-      assert.strictEqual(getDice('d4') instanceof Dice, true);
+      assert.strictEqual(isDice(getDice('d4')), true);
     });
 
     it('works properly with dropped count', () => {

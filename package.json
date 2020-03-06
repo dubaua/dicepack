@@ -2,7 +2,7 @@
   "name": "roll-expression",
   "version": "1.0.0",
   "description": "Simple, blazing fast, no dependencies dice notation roller library",
-  "source": "source/pack.js",
+  "source": "src/pack.js",
   "main": "dist/roll-expression.min.js",
   "umd:main": "dist/roll-expression.umd.js",
   "module": "dist/roll-expression.mjs",
@@ -34,7 +34,7 @@
   "scripts": {
     "test": "mocha --require @babel/register src/**/*.spec.js",
     "test_utils": "mocha --require @babel/register src/utils/test/*.spec.js",
-    "build": "microbundle --name RollExpression --strict",
+    "build": "microbundle --name RollExpression --strict --alias @=src",
     "dev": "parcel example/index.html --open --port 8080"
   },
   "minify": {

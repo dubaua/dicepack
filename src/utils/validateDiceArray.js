@@ -1,8 +1,16 @@
-import Dice from '../types/Dice.js';
+import '@/core/typedef.js';
+import isDice from '@/utils/isDice.js';
+
+/**
+ * Passes down valid dice or throws TypeError
+ *
+ * @param {Array.<Dice>} dice
+ * @returns {Array.<Dice>} given dice
+ */
 
 function validateDiceArray(dice) {
-  if (!dice.every(die => die instanceof Dice)) {
-    throw new Error(`Given dice array ${dice} contains elements type of differs from Dice.`);
+  if (!dice.every(isDice)) {
+    throw new TypeError(`Given dice array ${dice} contains elements differs from Dice.`);
   } else {
     return dice;
   }

@@ -1,26 +1,25 @@
 import assert from 'assert';
-import Dice from '../../types/Dice.js';
-import Point from '../../types/Point.js';
-import distributeDice from '../distributeDice.js';
+import distributeDiceArray from '@/core/distributeDiceArray.js';
+import isPoint from '@/utils/isPoint';
 
 const approximatelyEquals = (value1, value2, epsilon = 0.01) => Math.abs(value1 - value2) < epsilon;
 
-describe('distributeDice', () => {
+describe('distributeDiceArray', () => {
   describe('testing types', () => {
-    const distribution = distributeDice([new Dice({ count: 1, side: 6 })]);
+    const distribution = distributeDiceArray([{ count: 1, side: 6 }]);
     it('distribution is Array', () => {
       const isArray = Array.isArray(distribution);
       assert.strictEqual(isArray, true);
     });
 
-    it('each point instance of Point', () => {
-      const eachIsPoint = distribution.every(point => point instanceof Point);
+    it('each point is Point', () => {
+      const eachIsPoint = distribution.every(isPoint);
       assert.strictEqual(eachIsPoint, true);
     });
   });
 
   describe('testing d6', () => {
-    const distribution = distributeDice([new Dice({ count: 1, side: 6 })]);
+    const distribution = distributeDiceArray([{ count: 1, side: 6 }]);
     const first = distribution[0];
     const last = distribution[distribution.length - 1];
 
@@ -42,7 +41,7 @@ describe('distributeDice', () => {
   });
 
   describe('testing 2d4', () => {
-    const distribution = distributeDice([new Dice({ count: 2, side: 4 })]);
+    const distribution = distributeDiceArray([{ count: 2, side: 4 }]);
     const first = distribution[0];
     const last = distribution[distribution.length - 1];
 
@@ -72,11 +71,11 @@ describe('distributeDice', () => {
   });
 
   describe('testing d12+d10+d6+5', () => {
-    const distribution = distributeDice([
-      new Dice({ count: 1, side: 12 }),
-      new Dice({ count: 1, side: 10 }),
-      new Dice({ count: 1, side: 6 }),
-      new Dice({ count: 5, side: 1 }),
+    const distribution = distributeDiceArray([
+      { count: 1, side: 12 },
+      { count: 1, side: 10 },
+      { count: 1, side: 6 },
+      { count: 5, side: 1 },
     ]);
 
     const first = distribution[0];
@@ -108,7 +107,7 @@ describe('distributeDice', () => {
   });
 
   describe('testing 2d0', () => {
-    const distribution = distributeDice([new Dice({ count: 2, side: 0 })]);
+    const distribution = distributeDiceArray([{ count: 2, side: 0 }]);
 
     const first = distribution[0];
     it('distribution length = 1', () => {
@@ -125,7 +124,7 @@ describe('distributeDice', () => {
   });
 
   describe('testing 5d1', () => {
-    const distribution = distributeDice([new Dice({ count: 5, side: 1 })]);
+    const distribution = distributeDiceArray([{ count: 5, side: 1 }]);
 
     const first = distribution[0];
     it('distribution length = 1', () => {
@@ -142,7 +141,7 @@ describe('distributeDice', () => {
   });
 
   describe('testing empty array', () => {
-    const distribution = distributeDice([]);
+    const distribution = distributeDiceArray([]);
 
     const first = distribution[0];
     it('distribution length = 1', () => {

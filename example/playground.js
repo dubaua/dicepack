@@ -163,8 +163,7 @@ function handleRoll() {
     }
   }
 
-  const results = state.diceSet.roll(true);
-  const { result, rolls } = results;
+  const { result, rolls } = state.diceSet.roll(true);
 
   renderResults(result, rolls);
   renderStats(result, isChanged);
@@ -402,3 +401,6 @@ function updateDistributionClassname() {
     }
   }
 }
+
+const barbarianDamage = new DicePack('2d6+5');
+console.log(barbarianDamage.roll(true));
