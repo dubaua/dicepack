@@ -5,8 +5,8 @@ import validateDiceArray from '@/utils/validateDiceArray.js';
  * Normalizes dice notation have sorted in descending side order, positive count,
  * lowercased, no spaces, no 1dN, no flat dice such as d0, d1, 0dN
  *
- * @param {Array<Dice>} diceArray
- * @returns {Array<Dice>}
+ * @param {Array<Dice>} diceArray array of Dice
+ * @returns {Array<Dice>} array of Dice
  */
 
 const normalizeDiceArray = diceArray =>

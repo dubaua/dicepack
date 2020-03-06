@@ -4,7 +4,7 @@ import validateDiceArray from '@/utils/validateDiceArray.js';
 /**
  * Converts dice array to notation
  *
- * @param {Array<Dice>} diceArray
+ * @param {Array<Dice>} diceArray array of Dice
  * @returns {string} dice notation
  */
 

@@ -5,7 +5,7 @@ import directProduct from '@/utils/directProduct.js';
 /**
  * Converts Dice Array to Point Array describes each possible result and chance
  *
- * @param {Array<Dice>} diceArray
+ * @param {Array<Dice>} diceArray array of Dice
  * @returns {Array<Point>} array of result chances
  */
 

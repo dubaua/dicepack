@@ -1,13 +1,13 @@
 import '@/core/typedef.js';
-import collectDiceArray from '@/utils/collectDiceArray.js';
+import sum from '@/utils/sum.js';
 
 /**
  * Calculates maximum possible result
  *
- * @param {Array<Dice>} diceArray
- * @returns {number}
+ * @param {Array<Dice>} diceArray array of Dice
+ * @returns {number} maximum possible result
  */
 
-const maxDiceArray = diceArray => collectDiceArray(diceArray.map(({ count, side }) => Math.max(count, count * side)));
+const maxDiceArray = diceArray => diceArray.map(({ count, side }) => Math.max(count, count * side)).reduce(sum, 0);
 
 export default maxDiceArray;

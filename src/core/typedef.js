@@ -7,13 +7,13 @@
 /**
  * @typedef {Object} Result
  * @property {number} side non negative integer
- * @property {number} roll an integer
+ * @property {Array<number>} rolled an integer
  */
 
 /**
  * @typedef {Object} Detailed
- * @property {number} result sum of rolls
- * @property {Array<Array<Result>>} rolls array of array of rolls
+ * @property {number} total sum of all roll results
+ * @property {Array<Result>} results array of rolls results
  */
 
 /**

@@ -8,8 +8,8 @@ import isInteger from '@/utils/isInteger.js';
  * @returns
  */
 
-function isResult({ side, roll }) {
-  return isInteger(side) && side >= 0 && isInteger(roll);
+function isResult({ side, rolled }) {
+  return isInteger(side) && side >= 0 && rolled.every(isInteger);
 }
 
 export default isResult;

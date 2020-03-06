@@ -8,7 +8,7 @@ const NOTATION_REGEXP = /^((-?)(\d+|\d*d\d+))([+-](\d+|\d*d\d+))*$/;
  * Converts dice notation to array of Dice
  *
  * @param {string} notation
- * @returns {Array<Dice>}
+ * @returns {Array<Dice>} array of Dice
  */
 
 const toDiceArray = notation =>

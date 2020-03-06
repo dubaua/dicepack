@@ -9,8 +9,8 @@ import isResult from '@/utils/isResult.js';
  * @returns
  */
 
-function isDetailed({ result, rolls }) {
-  return isInteger(result) && Array.isArray(rolls) && rolls.every(roll => Array.isArray(roll) && roll.every(isResult));
+function isDetailed({ total, results }) {
+  return isInteger(total) && Array.isArray(results) && results.every(isResult);
 }
 
 export default isDetailed;

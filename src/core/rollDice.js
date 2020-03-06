@@ -1,28 +1,26 @@
 import '@/core/typedef.js';
 import getRandomInt from '@/utils/getRandomInt.js';
 
-// TODO jsDoc
-
 /**
+ * Rolls diven dice and return rolls array and side as Result
  *
- *
- * @param {Dice} dice
- * @returns
+ * @param {Dice} dice count and side
+ * @returns {Result} side and rolled array
  */
 
 function rollDice({ count, side }) {
-  const results = [];
+  const rolled = [];
   // no need to roll d1
   if (side === 1 || side === 0 || count === 0) {
-    results.push(count * side);
+    rolled.push(count * side);
   } else {
     const rollCount = Math.abs(count);
     const sign = Math.sign(count);
     for (let i = 0; i < rollCount; i++) {
-      results.push(sign * getRandomInt(side));
+      rolled.push(sign * getRandomInt(side));
     }
   }
-  return results;
+  return { side, rolled };
 }
 
 export default rollDice;
