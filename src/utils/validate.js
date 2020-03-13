@@ -3,9 +3,10 @@
  * @typedef {Object} Regexp
  */
 
+// TODO is it type of error?
+
 /**
- * Passes down valid string or throws TypeError
- *
+ * Return given string if it matched regexp or throws Error
  * @param {string} string
  * @param {Regexp} regexp
  * @returns {string}
@@ -13,7 +14,7 @@
 
 function validate(string, regexp) {
   if (typeof string !== 'string' || !regexp.test(string)) {
-    throw new TypeError(`Given notation ${string} isn't valid`);
+    throw new Error(`Given string ${string} doesn't match given regular expression ${regexp}`);
   }
   return string;
 }

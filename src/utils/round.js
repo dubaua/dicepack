@@ -2,7 +2,6 @@ import getSign from '@/utils/getSign.js';
 
 /**
  * returns rounded to passed precision number
- *
  * @param {number} number
  * @param {number} [precision=2]
  * @returns {number} rounded number

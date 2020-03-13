@@ -1,33 +1,27 @@
 import '@/core/typedef.js';
 import normalizeDiceArray from '@/core/normalizeDiceArray.js';
 import directProduct from '@/utils/directProduct.js';
+import splitArrayByFilter from '@/utils/splitArrayByFilter.js';
 
 /**
- * Converts Dice Array to Point Array describes each possible result and chance
- *
+ * Calclulates chance for each result
  * @param {Array<Dice>} diceArray array of Dice
  * @returns {Array<Point>} array of result chances
  */
 
 function distributeDiceArray(diceArray) {
+  // for performance is better to normalize dice
+  const normalizedDiceArray = normalizeDiceArray(diceArray);
+
+  // split to dice array and modifiers
+  const [_diceArray, modifierArray] = splitArrayByFilter(normalizedDiceArray, dice => dice.side !== 1);
+
+  // extract modifier
+  const modifier = modifierArray.length ? modifierArray[0].count : 0;
+
   let distribution = [];
-  const normalized = normalizeDiceArray(diceArray);
-
-  // modifiy zeroes
-  const onlyDice = [];
-  const modifiers = [];
-  normalized.forEach(die => {
-    if (die.side === 1 || die.side === 0) {
-      modifiers.push(die);
-    } else {
-      onlyDice.push(die);
-    }
-  });
-
-  const modifier = modifiers.length ? modifiers[0].count * modifiers[0].side : 0;
-
-  if (onlyDice.length) {
-    const probabilities = onlyDice.reduce((accumulator, { count, side }) => {
+  if (_diceArray.length) {
+    const probabilities = _diceArray.reduce((accumulator, { count, side }) => {
       const dieProbabilities = [];
       for (let result = 1; result <= side; result++) {
         dieProbabilities.push(result);

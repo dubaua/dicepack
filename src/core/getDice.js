@@ -7,7 +7,6 @@ const STARTING_D_WIHTOUT_COUNT = /^(-?)d/;
 
 /**
  * Transforms single dice notation to Dice object
- *
  * @param {string} notation
  * @returns {Dice} count and side
  */

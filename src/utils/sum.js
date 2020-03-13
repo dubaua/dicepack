@@ -1,6 +1,5 @@
 /**
  * sums two numbers
- *
  * @param {number} a number
  * @param {number} b number
  * @returns {number} a + b

@@ -3,14 +3,13 @@ import getRandomInt from '@/utils/getRandomInt.js';
 
 /**
  * Rolls diven dice and return rolls array and side as Result
- *
  * @param {Dice} dice count and side
  * @returns {Result} side and rolled array
  */
 
 function rollDice({ count, side }) {
   const rolled = [];
-  // no need to roll d1
+  // no need to roll d1, d0, 0dN
   if (side === 1 || side === 0 || count === 0) {
     rolled.push(count * side);
   } else {

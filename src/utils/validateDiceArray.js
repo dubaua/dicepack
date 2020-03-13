@@ -3,7 +3,6 @@ import isDice from '@/utils/isDice.js';
 
 /**
  * Passes down valid dice or throws TypeError
- *
  * @param {Array.<Dice>} dice
  * @returns {Array.<Dice>} given dice
  */

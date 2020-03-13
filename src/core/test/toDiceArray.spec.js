@@ -19,6 +19,19 @@ describe('toDiceArray', () => {
     assert.strictEqual(eachIsDice, true);
   });
 
+  const [sixth, flat] = result;
+  it('sixth parsed correctly: side = 6, count = 2', () => {
+    const { side, count } = sixth;
+    const isCorrect = side === 6 && count === 2;
+    assert.strictEqual(isCorrect, true);
+  });
+
+  it('flat parsed correctly: side = 1, count = 5', () => {
+    const { side, count } = flat;
+    const isCorrect = side === 1 && count === 5;
+    assert.strictEqual(isCorrect, true);
+  });
+
   it(`throws an error if expression isn't valid`, () => {
     assert.throws(() => {
       toDiceArray('2d');

@@ -1,4 +1,5 @@
-import { DicePack } from '@/pack.js';
+import DicePack from '@/pack.js';
+
 import { bindReference, create } from './render.js';
 import round from '@/utils/round.js';
 import randomizeDiceNotation from '@/utils/randomizeDiceNotation.js';
@@ -401,6 +402,3 @@ function updateDistributionClassname() {
     }
   }
 }
-
-const barbarianDamage = new DicePack('2d6+5');
-console.log(barbarianDamage.roll(true));

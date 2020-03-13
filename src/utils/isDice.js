@@ -2,10 +2,9 @@ import '@/core/typedef.js';
 import isInteger from '@/utils/isInteger.js';
 
 /**
- * Check if given die is valid
- *
+ * Check if given dice is valid
  * @param {Dice} dice
- * @returns
+ * @returns {boolean}
  */
 
 function isDice({ count, side }) {

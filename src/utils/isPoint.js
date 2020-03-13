@@ -3,7 +3,6 @@ import isInteger from '@/utils/isInteger.js';
 
 /**
  * Check if given point is valid
- *
  * @param {Point} point
  * @returns
  */

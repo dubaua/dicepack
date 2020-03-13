@@ -3,7 +3,6 @@ import isInteger from '@/utils/isInteger.js';
 
 /**
  * Check if given result is valid
- *
  * @param {Result} result
  * @returns
  */

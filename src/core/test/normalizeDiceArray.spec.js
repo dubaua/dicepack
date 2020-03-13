@@ -101,5 +101,25 @@ describe('normalizeDiceArray', () => {
     });
   });
 
-  // TODO zero cases, all normalize cases
+  describe('drop zero side', () => {
+    it('d4+6d0 deep equal d4', () => {
+      const normalized = normalizeDiceArray([
+        { count: 1, side: 4 },
+        { count: 6, side: 0 },
+      ]);
+      const expected = [{ count: 1, side: 4 }];
+      assert.deepEqual(normalized, expected);
+    });
+  });
+
+  describe('drop zero count', () => {
+    it('d4+0d12 deep equal d4', () => {
+      const normalized = normalizeDiceArray([
+        { count: 1, side: 4 },
+        { count: 0, side: 12 },
+      ]);
+      const expected = [{ count: 1, side: 4 }];
+      assert.deepEqual(normalized, expected);
+    });
+  });
 });
