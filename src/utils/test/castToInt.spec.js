@@ -1,5 +1,5 @@
 import assert from 'assert';
-import castToInt from '../castToInt.js';
+import castToInt from '@/utils/castToInt.js';
 
 describe('castToInt', () => {
   describe('works with strings representing integers', () => {

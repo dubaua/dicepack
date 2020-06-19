@@ -1,11 +1,11 @@
 {
-  "name": "roll-expression",
+  "name": "dicepack",
   "version": "1.0.0",
   "description": "Simple, blazing fast, no dependencies dice notation roller library",
-  "source": "src/pack.js",
-  "main": "dist/roll-expression.min.js",
-  "umd:main": "dist/roll-expression.umd.js",
-  "module": "dist/roll-expression.mjs",
+  "source": "src/main.js",
+  "main": "dist/dicepack.min.js",
+  "umd:main": "dist/dicepack.umd.js",
+  "module": "dist/dicepack.mjs",
   "keywords": [
     "roll",
     "dice",
@@ -13,38 +13,34 @@
     "d&d",
     "rpg"
   ],
-  "repository": "git@github.com:dubaua/roll-expression.git",
+  "repository": "git@github.com:dubaua/dicepack.git",
   "author": "Vladimir Lysov",
   "email": "dubaua@gmail.com",
   "license": "MIT",
   "devDependencies": {
-    "@babel/core": "^7.8.6",
-    "@babel/preset-env": "^7.8.6",
-    "@babel/register": "^7.8.6",
+    "@babel/core": "^7.10.2",
+    "@babel/preset-env": "^7.10.2",
+    "@babel/register": "^7.10.1",
     "babel-plugin-module-resolver": "^4.0.0",
-    "eslint": "^6.8.0",
-    "eslint-config-standard": "^14.1.0",
-    "eslint-plugin-import": "^2.20.1",
+    "eslint": "^7.2.0",
+    "eslint-config-standard": "^14.1.1",
+    "eslint-plugin-import": "^2.21.2",
     "eslint-plugin-standard": "^4.0.1",
-    "microbundle": "^0.11.0",
-    "mocha": "^7.1.0",
+    "microbundle": "^0.12.0",
+    "mocha": "^8.0.1",
     "parcel-bundler": "^1.12.4",
-    "sass": "^1.26.1"
+    "sass": "^1.26.8"
   },
   "scripts": {
-    "test": "mocha --require @babel/register src/**/*.spec.js",
+    "test": "mocha --require @babel/register src/**/test/*.spec.js",
     "test_utils": "mocha --require @babel/register src/utils/test/*.spec.js",
-    "build": "microbundle --name RollExpression --strict --alias @=src",
+    "build": "microbundle --name DicePack --strict --alias @=src",
     "dev": "parcel example/index.html --open --port 8080"
   },
   "minify": {
     "mangle": {
       "reserved": [
-        "Detailed",
-        "Dice",
-        "DicePack",
-        "Point",
-        "Result"
+        "DicePack"
       ]
     }
   }

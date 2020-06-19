@@ -1,4 +1,4 @@
-import sum from './sum.js';
+import sumArray from '@/math/sumArray.js';
 
 /**
  * returns average of passed numbers
@@ -6,6 +6,6 @@ import sum from './sum.js';
  * @returns {number} one of passed arguments
  */
 
-const getAverage = (...items) => items.reduce(sum) / items.length;
+const getAverage = (...items) => sumArray(items.slice()) / items.length;
 
 export default getAverage;

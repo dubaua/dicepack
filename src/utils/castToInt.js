@@ -1,5 +1,5 @@
 /**
- * Tries parse string to integer, returns zero if failed
+ * Tries to parse string to integer, returns zero if failed
  * @param {string} string a string represening number
  * @returns {number} an integer or zero
  */

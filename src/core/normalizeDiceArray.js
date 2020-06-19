@@ -1,5 +1,5 @@
 import '@/core/typedef.js';
-import validateDiceArray from '@/utils/validateDiceArray.js';
+import isDice from '@/utils/isDice.js';
 
 /**
  * Turns negative dice count to positive dice and negative modifier,
@@ -11,8 +11,11 @@ import validateDiceArray from '@/utils/validateDiceArray.js';
  */
 
 function normalizeDiceArray(diceArray) {
+  if (!diceArray.every(isDice)) {
+    throw new TypeError(`Given dice array ${diceArray} contains elements differs from Dice.`);
+  }
   return (
-    validateDiceArray(diceArray)
+    diceArray
       // Turns negative dice count to positive dice and negative modifier
       .reduce((accumulator, { count, side }) => {
         if (side !== 1 && count < 0) {

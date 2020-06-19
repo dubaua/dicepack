@@ -5,7 +5,7 @@ import isResult from '@/utils/isResult.js';
 /**
  * Check if given detailed result is valid
  * @param {Detailed} detailed
- * @returns
+ * @returns {boolean}
  */
 
 function isDetailed({ total, results }) {

@@ -1,5 +1,5 @@
 import '@/core/typedef.js';
-import validateDiceArray from '@/utils/validateDiceArray.js';
+import isDice from '@/utils/isDice.js';
 
 /**
  * Converts dice array to notation
@@ -8,8 +8,11 @@ import validateDiceArray from '@/utils/validateDiceArray.js';
  */
 
 function toNotation(diceArray) {
+  if (!diceArray.every(isDice)) {
+    throw new TypeError(`Given dice array ${diceArray} contains elements differs from Dice.`);
+  }
   return (
-    validateDiceArray(diceArray).reduce(
+    diceArray.reduce(
       (accumulator, { count, side }, index) =>
         `${accumulator}${
           // don't plus at string start

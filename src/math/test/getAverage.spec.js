@@ -1,5 +1,5 @@
 import assert from 'assert';
-import getAverage from '../getAverage.js';
+import getAverage from '@/math/getAverage.js';
 
 describe('getAverage', () => {
   describe('correctly calculates average', () => {

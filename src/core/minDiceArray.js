@@ -1,5 +1,5 @@
 import '@/core/typedef.js';
-import sum from '@/utils/sum.js';
+import sumArray from '@/math/sumArray.js';
 
 /**
  * Calculates minimum possible result
@@ -8,7 +8,7 @@ import sum from '@/utils/sum.js';
  */
 
 function minDiceArray(diceArray) {
-  return diceArray.map(({ count, side }) => Math.min(count, count * side)).reduce(sum, 0);
+  return sumArray(diceArray.map(({ count, side }) => Math.min(count, count * side)));
 }
 
 export default minDiceArray;

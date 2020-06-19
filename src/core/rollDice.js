@@ -1,5 +1,5 @@
 import '@/core/typedef.js';
-import getRandomInt from '@/utils/getRandomInt.js';
+import getRandomInt from '@/math/getRandomInt.js';
 
 /**
  * Rolls diven dice and return rolls array and side as Result

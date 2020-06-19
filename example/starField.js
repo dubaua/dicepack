@@ -1,4 +1,4 @@
-import { DicePack } from '../src/pack.js';
+import { DicePack } from '@/main.js';
 import { bindReference, create } from './render.js';
 
 const field = document.getElementById('space');

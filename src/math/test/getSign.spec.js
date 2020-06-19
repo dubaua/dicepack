@@ -1,5 +1,5 @@
 import assert from 'assert';
-import getSign from '@/utils/getSign.js';
+import getSign from '@/math/getSign.js';
 
 describe('getSign', () => {
   describe('numbers', () => {

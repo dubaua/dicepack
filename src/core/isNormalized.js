@@ -1,6 +1,6 @@
 import toDiceArray from '@/core/toDiceArray.js';
-import sorted from '@/utils/sorted.js';
-import unique from '@/utils/unique.js';
+import isArraySorted from '@/utils/isArraySorted.js';
+import isArrayUnique from '@/utils/isArrayUnique.js';
 
 /*
  * [A-Z]+       captures uppercase
@@ -14,8 +14,8 @@ const NOT_NORMALIZED_REGEXP = /[A-Z]+|\s|d1(\D+|$)|(\D+|^)1d\d+|-(\d*)d/;
 
 function isDiceGroupedAndSorted(notation) {
   const sideArray = toDiceArray(notation).map(die => die.side);
-  const isUnique = sideArray.reduce(unique, []).length === sideArray.length;
-  const isSorted = sideArray.every(sorted);
+  const isUnique = isArrayUnique(sideArray);
+  const isSorted = isArraySorted(sideArray);
   return isUnique && isSorted;
 }
 

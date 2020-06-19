@@ -1,8 +1,6 @@
 import '@/core/typedef.js';
 import getDice from '@/core/getDice.js';
-import validate from '@/utils/validate.js';
-
-const NOTATION_REGEXP = /^((-?)(\d+|\d*d\d+))([+-](\d+|\d*d\d+))*$/;
+import NOTATION_REGEXP from '@/core/notationRegexp.js';
 
 /**
  * Converts dice notation to array of Dice
@@ -11,10 +9,13 @@ const NOTATION_REGEXP = /^((-?)(\d+|\d*d\d+))([+-](\d+|\d*d\d+))*$/;
  */
 
 function toDiceArray(notation) {
-  return validate(notation, NOTATION_REGEXP)
+  if (typeof notation !== 'string' || !NOTATION_REGEXP.test(notation)) {
+    throw new Error(`Given string ${notation} doesn't match given regular expression ${NOTATION_REGEXP}`);
+  }
+  return notation
     .replace(/-/g, '+-')
     .split('+')
-    .filter(string => string !== '')
+    .filter((string) => string !== '')
     .map(getDice);
 }
 

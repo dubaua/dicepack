@@ -1,5 +1,5 @@
 /**
- * returns number positive or negative 1 or 0
+ * Returns number positive or negative 1 or 0
  * @param {number} x
  * @returns {number} 1 | -1 | 0 | -0
  */

@@ -1,7 +1,7 @@
-import getRandomInt from './getRandomInt.js';
+import getRandomInt from '@/math/getRandomInt.js';
 
 /**
- * returns random of passed arguments
+ * Returns a random of passed arguments
  * @param {...*} items any agruments
  * @returns one of passed arguments
  */

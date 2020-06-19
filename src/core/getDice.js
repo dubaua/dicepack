@@ -1,8 +1,7 @@
 import '@/core/typedef.js';
 import castToInt from '@/utils/castToInt.js';
-import validate from '@/utils/validate.js';
+import DICE_REGEXP from '@/core/diceRegexp.js';
 
-const DICE_REGEXP = /^-?(\d+|\d*d\d+)$/;
 const STARTING_D_WIHTOUT_COUNT = /^(-?)d/;
 
 /**
@@ -12,7 +11,11 @@ const STARTING_D_WIHTOUT_COUNT = /^(-?)d/;
  */
 
 function getDice(notation) {
-  const [count = 1, side = 1] = validate(notation, DICE_REGEXP)
+  if (typeof notation !== 'string' || !DICE_REGEXP.test(notation)) {
+    throw new Error(`Given string ${notation} doesn't match given regular expression ${DICE_REGEXP}`);
+  }
+
+  const [count = 1, side = 1] = notation
     .replace(STARTING_D_WIHTOUT_COUNT, '$11d') // restore dropped 1d with sign
     .split('d')
     .map(castToInt);

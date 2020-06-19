@@ -1,6 +1,6 @@
 import '@/core/typedef.js';
 import rollDice from '@/core/rollDice.js';
-import sum from '@/utils/sum.js';
+import sumArray from '@/math/sumArray.js';
 
 /**
  * Rolls array of Dice, calculating sum of all rolls and return detailed results
@@ -10,7 +10,7 @@ import sum from '@/utils/sum.js';
 
 function rollDiceArray(diceArray) {
   const results = diceArray.map(rollDice);
-  const total = results.map(({ rolled }) => rolled.reduce(sum, 0)).reduce(sum, 0);
+  const total = sumArray(results.map(({ rolled }) => sumArray(rolled.slice())));
   return { total, results };
 }
 

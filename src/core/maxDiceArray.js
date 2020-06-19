@@ -1,5 +1,5 @@
 import '@/core/typedef.js';
-import sum from '@/utils/sum.js';
+import sumArray from '@/math/sumArray.js';
 
 /**
  * Calculates maximum possible result
@@ -8,7 +8,7 @@ import sum from '@/utils/sum.js';
  */
 
 function maxDiceArray(diceArray) {
-  return diceArray.map(({ count, side }) => Math.max(count, count * side)).reduce(sum, 0);
+  return sumArray(diceArray.map(({ count, side }) => Math.max(count, count * side)));
 }
 
 export default maxDiceArray;

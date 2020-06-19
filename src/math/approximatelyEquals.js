@@ -5,6 +5,7 @@
  * @param {number} [epsilon=0.01]
  * @returns {boolean}
  */
+
 function approximatelyEquals(first, second, epsilon = 0.01) {
   return Math.abs(first - second) < epsilon;
 }

@@ -1,7 +1,7 @@
 import '@/core/typedef.js';
 
 /**
- * calculates count of possible roll result combinations
+ * Calculates count of possible roll result combinations
  * @param {Array<Dice>} diceArray
  * @returns {number} count of combinations
  */

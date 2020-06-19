@@ -18,10 +18,3 @@
  * @property {number} total sum of all roll results
  * @property {Array<Result>} results array of rolls results
  */
-
-/**
- * A chance for getting result
- * @typedef {Object} Point
- * @property {number} result an integer
- * @property {number} chance a number between 0 and 1
- */

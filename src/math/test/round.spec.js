@@ -1,5 +1,5 @@
 import assert from 'assert';
-import round from '@/utils/round.js';
+import round from '@/math/round.js';
 
 describe('round', () => {
   describe('zero precision', () => {

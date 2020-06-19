@@ -1,7 +1,6 @@
-import DicePack from '@/pack.js';
-
+import DicePack from '@/main.js';
 import { bindReference, create } from './render.js';
-import round from '@/utils/round.js';
+import round from '@/math/round.js';
 import randomizeDiceNotation from '@/utils/randomizeDiceNotation.js';
 
 window.DicePack = DicePack;
@@ -164,23 +163,25 @@ function handleRoll() {
     }
   }
 
-  const { result, rolls } = state.diceSet.roll(true);
+  const { total, results } = state.diceSet.roll();
 
-  renderResults(result, rolls);
-  renderStats(result, isChanged);
+  renderResults(total, results);
+  renderStats(total, isChanged);
 }
 
-function renderResults(result, rolls) {
-  state.refs.resultNode.textContent = result;
+function renderResults(total, results) {
+  console.log(total, results);
+
+  state.refs.resultNode.textContent = total;
 
   const detailed = create(
     'div.detailed',
     {},
-    rolls.map(group =>
+    results.map(({ rolled, side }) =>
       create(
         'span.detailed__group',
         {},
-        group.map(({ roll, side }) => (side === 0 || side === 1 ? renderNumber(roll) : renderDie(roll, side))),
+        rolled.map((result) => (side === 0 || side === 1 ? renderNumber(result) : renderDie(result, side))),
       ),
     ),
   );
@@ -215,14 +216,21 @@ const renderDie = (roll, side) =>
     ],
   ]);
 
-const renderNumber = roll =>
-  create(`span.detailed__number${roll < 0 ? '.detailed__number--negative' : ''}`, { domProps: { textContent: roll } });
+function renderNumber(roll) {
+  return create(`span.detailed__number${roll < 0 ? '.detailed__number--negative' : ''}`, {
+    domProps: { textContent: roll },
+  });
+}
+
+function getChance(distribution, result) {
+  return (distribution[result] * 100).toFixed(2) + '%';
+}
 
 function renderStats(result, isChanged) {
   // if notation wasn't changed just highlight result column
   if (!isChanged && state.distribution) {
     // update active column
-    state.refs.columnNodeArray.forEach(columnNode => {
+    state.refs.columnNodeArray.forEach((columnNode) => {
       if (columnNode.result === result) {
         columnNode.classList.add('distribution__column--active');
       } else {
@@ -231,7 +239,7 @@ function renderStats(result, isChanged) {
     });
 
     // update chance
-    const chance = (state.distribution.filter(column => column.result === result)[0].chance * 100).toFixed(2) + '%';
+    const chance = getChance(state.distribution, result);
     state.refs.chanceNode.textContent = chance;
 
     return false;
@@ -244,15 +252,20 @@ function renderStats(result, isChanged) {
   state.refs.columnNodeArray = [];
 
   if (state.distribution) {
-    const chance = (state.distribution.filter(column => column.result === result)[0].chance * 100).toFixed(2) + '%';
+    const chance = getChance(state.distribution, result);
     state.refs.chanceNode.textContent = chance;
 
-    const maxChance = round(Math.max(...state.distribution.map(column => column.chance)), 3);
+    const distributionArray = Object.keys(state.distribution).map((key) => ({
+      result: Number(key),
+      chance: state.distribution[key],
+    }));
+
+    const maxChance = round(Math.max(...Object.values(state.distribution)), 3);
     const multiplier = Math.floor(1 / maxChance);
     const multipliers = [100, 50, 25, 20, 10, 5, 4, 2, 1];
-    const closestMultiplier = multipliers.filter(m => m <= multiplier)[0];
+    const closestMultiplier = multipliers.filter((m) => m <= multiplier)[0];
 
-    state.distribution.forEach(column => {
+    distributionArray.forEach((column) => {
       const columnRefs = {};
       const columnNode = create(
         `div.distribution__column${column.result === result ? '.distribution__column--active' : ''}`,
@@ -335,7 +348,7 @@ function renderStats(result, isChanged) {
       );
     }
   } else {
-    state.refs.chartMessageNode.innerHTML = "Distribution wasn't calculated due to complexicity";
+    state.refs.chartMessageNode.innerHTML = 'Distribution wasn\'t calculated due to complexicity';
   }
 }
 

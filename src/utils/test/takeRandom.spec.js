@@ -1,5 +1,5 @@
 import assert from 'assert';
-import takeRandom from '../takeRandom.js';
+import takeRandom from '@/utils/takeRandom.js';
 
 describe('takeRandom', () => {
   it('always return one of arguments', () => {

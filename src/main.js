@@ -7,11 +7,11 @@ import normalizeDiceArray from '@/core/normalizeDiceArray.js';
 import rollDiceArray from '@/core/rollDiceArray.js';
 import toDiceArray from '@/core/toDiceArray.js';
 import toNotation from '@/core/toNotation.js';
-import getAverage from '@/utils/getAverage.js';
-import getDiceArrayComplexity from '@/utils/getDiceArrayComplexity.js';
+import getAverage from '@/math/getAverage.js';
+import getDiceArrayComplexity from '@/math/getDiceArrayComplexity.js';
 import sanitize from '@/utils/sanitize.js';
 
-const MAX_COMPLEXITY = 65536;
+const MAX_COMPLEXITY = 1e8;
 
 /** Class representing a set of dice for rolling and statistics */
 class DicePack {
@@ -35,7 +35,7 @@ class DicePack {
     this.mean = getAverage(this.min, this.max);
     /** @type {number} */
     this.complexity = getDiceArrayComplexity(this.dice);
-    /** @type {Array<Point>} */
+    /** @type {Distribution} */
     this.distribution = this.complexity <= MAX_COMPLEXITY ? distributeDiceArray(this.dice) : null;
   }
 
@@ -69,7 +69,7 @@ class DicePack {
   /**
    * Calclulates chance for each result
    * @param {string} notation dice notation
-   * @returns {Array<Point>} array of result chances
+   * @returns {Distribution} hashmap with result keys and chance values
    */
   static distribute(notation) {
     return distributeDiceArray(toDiceArray(sanitize(notation)));
